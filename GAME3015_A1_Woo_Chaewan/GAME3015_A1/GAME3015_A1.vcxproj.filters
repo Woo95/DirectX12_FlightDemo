@@ -16,18 +16,12 @@
     <Filter Include="Common">
       <UniqueIdentifier>{74806a07-8b65-4311-9def-cf3fb3a351f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Logic">
+      <UniqueIdentifier>{89f91c2b-bf18-4f6a-bac8-a6a271e3ebc5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FrameResource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="QuatAppStart.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Common\d3dApp.cpp">
@@ -51,14 +45,29 @@
     <ClCompile Include="Common\Camera.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="Aircraft.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameResource.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteNode.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationHelper.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameResource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Common\d3dApp.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -85,6 +94,27 @@
     </ClInclude>
     <ClInclude Include="Common\Camera.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Aircraft.hpp">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.hpp">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="FrameResource.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.hpp">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneNode.hpp">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteNode.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="World.hpp">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

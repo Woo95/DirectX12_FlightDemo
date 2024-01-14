@@ -128,6 +128,12 @@ void Camera::SetLens(float fovY, float aspect, float zn, float zf)
 	XMStoreFloat4x4(&mProj, P);
 }
 
+void Camera::SetLens(float Width, float Height)
+{
+	XMMATRIX P = XMMatrixOrthographicOffCenterLH(0.f, Width, 0.f, Height, 0.f, 1000.f);
+	XMStoreFloat4x4(&mProj, P);
+}
+
 void Camera::LookAt(FXMVECTOR pos, FXMVECTOR target, FXMVECTOR worldUp)
 {
 	XMVECTOR L = XMVector3Normalize(XMVectorSubtract(target, pos));
