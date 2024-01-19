@@ -7,7 +7,10 @@ World::World(Game* game)
 	, mBackground(nullptr)
 	, mWorldBounds(-1.5f, 1.5f, 200.0f, 0.0f) //Left, Right, Down, Up
 	, mSpawnPosition(0.f, 0.f)
-	, mScrollSpeed(1.0f)
+	, mScrollSpeed(3.0f)
+	, mBackGroundXSize(6.0f)
+	, mBackGroundZSize(100.0f)
+	, mBackGroundZStartPos(mBackGroundZSize / 2.0f - 2.5f)
 {
 }
 
@@ -23,8 +26,8 @@ void World::update(const GameTimer& gt)
 {
 	mSceneGraph->update(gt);
 
-	if (mBackground->getWorldPosition().z <= -45.f)
-		mBackground->setPosition(0.f, 0.f, 45.f);
+	if (mBackground->getWorldPosition().z <= -mBackGroundZStartPos)
+		mBackground->setPosition(0.f, 0.f, mBackGroundZStartPos);
 }
 
 void World::draw()
@@ -58,8 +61,8 @@ void World::buildScene()
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mGame));
 	mBackground = backgroundSprite.get();
 	//mBackground->setPosition(mWorldBounds.left, mWorldBounds.top);
-	mBackground->setPosition(0, 0, 45.0);
-	mBackground->setScale(6.0, 1.0, 100.0);	// length of 100 z-unit wide desert scaling 
+	mBackground->setPosition(0, 0, mBackGroundZStartPos);
+	mBackground->setScale(mBackGroundXSize, 1.0, mBackGroundZSize);
 	mBackground->setVelocity(0, -mScrollSpeed);
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 

@@ -35,5 +35,8 @@ private:
 	float								mScrollSpeed;
 	Aircraft*							mPlayerAircraft;
 	SpriteNode*							mBackground;
+	float								mBackGroundXSize;
+	float								mBackGroundZSize;
+	float								mBackGroundZStartPos;
 	Aircraft*							mEnemy;
 };
