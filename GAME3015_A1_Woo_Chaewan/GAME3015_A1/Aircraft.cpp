@@ -22,6 +22,28 @@ Aircraft::~Aircraft()
 {
 }
 
+void Aircraft::updateCurrent(const GameTimer& gt)
+{
+	switch (mType)
+	{
+	case (Eagle):	// move eagle
+		if (mWorldPosition.x >= 1.9f)
+		{
+			mWorldPosition.x = 1.9f;
+			setVelocity(-1.f, 0.f);
+		}
+
+		else if (mWorldPosition.x <= -1.9f)
+		{
+			mWorldPosition.x = -1.9f;
+			setVelocity(1.f, 0.f);
+		}
+		break;
+	}
+
+	Entity::updateCurrent(gt);
+}
+
 void Aircraft::drawCurrent() const
 {	
 }

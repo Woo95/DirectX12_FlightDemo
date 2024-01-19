@@ -19,6 +19,7 @@ public:
 
 
 private:
+	virtual	void		updateCurrent(const GameTimer& gt);
 	virtual void		drawCurrent() const;
 	virtual void		buildCurrent();
 

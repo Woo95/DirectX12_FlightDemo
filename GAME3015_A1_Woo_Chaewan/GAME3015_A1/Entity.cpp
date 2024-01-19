@@ -30,7 +30,7 @@ void Entity::updateCurrent(const GameTimer& gt)
 	mV.x = mVelocity.x * gt.DeltaTime();
 	mV.y = mVelocity.y * gt.DeltaTime();
 
-	move(mV.x, mV.y, 0);
+	move(mV.x, 0, mV.y);	// y and z swapped, because the game is 2D
 
 	renderer->World = getWorldTransform();
 	renderer->NumFramesDirty++;
