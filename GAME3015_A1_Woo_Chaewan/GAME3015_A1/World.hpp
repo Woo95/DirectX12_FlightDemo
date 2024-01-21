@@ -3,15 +3,34 @@
 #include "Aircraft.hpp"
 #include "SpriteNode.h"
 
+/**
+ * @brief World class that handles update, draw, and building the game world
+ */
 class World 
 {
 public:
+	/**
+	 * @brief Explicit constructor for the World class
+	 */
 	explicit							World(Game* window);
+	/**
+	 * @brief Destructor for the World class
+	 */
 	~World();
+	/**
+	* @brief Invoke the World instance's update routine on each frame
+	* @param Utilize the GameTimer reference gt to access the deltaTime property for updating the aircraft instance
+	*/
 	void								update(const GameTimer& gt);
+	/**
+	* @brief Draws the game
+	*/
 	void								draw();
 
 	//void								loadTextures();
+	/**
+	* @brief Builds the initial scene for the game
+	*/
 	void								buildScene();
 
 

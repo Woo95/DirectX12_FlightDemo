@@ -1,14 +1,29 @@
-#pragma once
-#include "Entity.hpp"
-
+/**
+ * @brief SpriteNode class in the scene graph and is used for rendering sprites in a game
+ */
 class SpriteNode :
     public Entity
 {
 public:
-	SpriteNode(Game* game);
-	virtual ~SpriteNode();
+    /**
+     * @brief Constructor for the SpriteNode class
+     * @param game Pointer to the Game instance
+     */
+    SpriteNode(Game* game);
+
+    /**
+     * @brief Destructor for the SpriteNode class
+     */
+    virtual ~SpriteNode();
 
 private:
-	virtual void		drawCurrent() const;
-	virtual void		buildCurrent();
+    /**
+     * @brief Draws the current SpriteNode
+     */
+    virtual void drawCurrent() const;
+
+    /**
+     * @brief Builds the current SpriteNode
+     */
+    virtual void buildCurrent();
 };
