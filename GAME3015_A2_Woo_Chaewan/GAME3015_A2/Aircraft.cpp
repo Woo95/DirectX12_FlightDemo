@@ -44,10 +44,6 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 	Entity::updateCurrent(gt);
 }
 
-void Aircraft::drawCurrent() const
-{	
-}
-
 void Aircraft::buildCurrent()
 {
 	auto render = std::make_unique<RenderItem>();

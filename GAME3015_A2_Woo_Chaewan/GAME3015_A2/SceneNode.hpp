@@ -49,6 +49,11 @@ struct RenderItem
 
 class Game;
 
+// 씬그래프의 트리 구조를 구성하기 위한 노드 클래스이다.
+// 이 클래스를 상속받아 출력하기 위한 클래스들을 만들어주는 용도로 사용한다.
+/**
+* @brief This class serves the purpose of constructing a tree structure for a scene graph and is meant to be inherited for creating classes responsible for rendering
+*/
 class SceneNode
 {
 public:
@@ -56,44 +61,116 @@ public:
 
 
 public:
+	/**
+	* @brief Constructor for the SceneNode class
+	* @param game ptr to the Game instance
+	*/
 	SceneNode(Game* game);
+	/**
+	* @brief Destructor for the SceneNode class
+	*/
 	virtual ~SceneNode();
 
+	/**
+	* @brief Attaches a child node to the current SceneNode instance
+	* @param child sceneNode instance ptr
+	*/
 	void					attachChild(Ptr child);
+	/**
+	* @brief Detaches a child node to the current SceneNode instance
+	* @param child sceneNode instance reference
+	*/
 	Ptr						detachChild(const SceneNode& node);
 
+	/**
+	* @brief Invoke the SceneNode instance's update routine on each frame
+	* @param Utilize the GameTimer reference gt to access the deltaTime property for updating the aircraft instance
+	*/
 	void					update(const GameTimer& gt);
+	/**
+	* @brief Draws on SceneNode instance
+	*/
 	void					draw() const;
+	/**
+	* @brief Builds on SceneNode instance
+	*/
 	void					build();
 
+	/**
+	* @brief Get x,y,z World Position
+	*/
 	XMFLOAT3				getWorldPosition() const;
+	/**
+	* @brief Set x,y,z World Position
+	*/
 	void					setPosition(float x, float y, float z);
+	/**
+	* @brief Get x,y,z World Rotation
+	*/
 	XMFLOAT3				getWorldRotation() const;
+	/**
+	* @brief Set x,y,z World Rotation
+	*/
 	void					setWorldRotation(float x, float y, float z);
+	/**
+	* @brief Get x,y,z World Scale
+	*/
 	XMFLOAT3				getWorldScale() const;
+	/**
+	* @brief Set x,y,z World Scale
+	*/
 	void					setScale(float x, float y, float z);
 
+	/**
+	* @brief Get 4x4 matrix world transform for parent and child instance
+	*/
 	XMFLOAT4X4				getWorldTransform() const;
+	/**
+	* @brief Get 4x4 matrix transform for current instance
+	*/
 	XMFLOAT4X4				getTransform() const;
 
+	/**
+	* @brief Move current instance by x,y,z
+	*/
 	void					move(float x, float y, float z);
 private:
+	/**
+	* @brief Update current SceneNode instance
+	* @param Utilize the GameTimer reference gt to access the deltaTime property for updating the aircraft instance
+	*/
 	virtual void			updateCurrent(const GameTimer& gt);
+	/**
+	* @brief Update SceneNode's child instance
+	* @param Utilize the GameTimer reference gt to access the deltaTime property for updating the aircraft instance
+	*/
 	void					updateChildren(const GameTimer& gt);
 
+	/**
+	* @brief Draw current SceneNode instance
+	*/
 	virtual void			drawCurrent() const;
+	/**
+	* @brief Draw SceneNode's child instance
+	*/
 	void					drawChildren() const;
+	/**
+	* @brief Build current SceneNode instance
+	*/
 	virtual void			buildCurrent();
+	/**
+	* @brief Build SceneNode's child instance
+	*/
 	void					buildChildren();
 
 protected:
-	Game*					game;
-	RenderItem*				renderer;
+	Game* game;
+	RenderItem* renderer;
 protected:
 	XMFLOAT3				mWorldPosition;
 	XMFLOAT3				mWorldRotation;
 	XMFLOAT3				mWorldScaling;
 	std::vector<Ptr>		mChildren;
-	SceneNode*				mParent;
+	SceneNode* mParent;
 };
 

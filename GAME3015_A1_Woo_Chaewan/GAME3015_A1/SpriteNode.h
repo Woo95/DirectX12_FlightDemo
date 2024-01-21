@@ -1,3 +1,6 @@
+#pragma once
+#include "Entity.hpp"
+
 /**
  * @brief SpriteNode class in the scene graph and is used for rendering sprites in a game
  */
