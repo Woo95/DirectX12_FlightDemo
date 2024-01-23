@@ -66,6 +66,12 @@
     <ClCompile Include="World.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandQueue.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\d3dApp.h">
@@ -114,6 +120,15 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="World.hpp">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Category.hpp">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandQueue.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
