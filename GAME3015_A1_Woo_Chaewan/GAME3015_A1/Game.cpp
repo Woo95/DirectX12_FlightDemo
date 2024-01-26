@@ -20,7 +20,7 @@ bool Game::Initialize()
 		return false;
 
 
-	mCamera.SetPosition(0, 5, 0);
+	mCamera.SetPosition(0, 9, 1.5);
 	mCamera.Pitch(3.14 / 2);
 
 	// Reset the command list to prep for initialization commands.
@@ -30,6 +30,7 @@ bool Game::Initialize()
 	// so we have to query this information.
 	mCbvSrvDescriptorSize = md3dDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 
+	// Modified LoadTextures(), BuildDescriptorHeaps(), BuildShapeGeometry(), BuildMaterials()
 	LoadTextures();
 	BuildRootSignature();
 	BuildDescriptorHeaps();
@@ -374,6 +375,26 @@ void Game::LoadTextures()
 		DesertTex->Resource, DesertTex->UploadHeap));
 
 	mTextures[DesertTex->Name] = std::move(DesertTex);
+
+	//JetColor
+	auto JetTex = std::make_unique<Texture>();
+	JetTex->Name = "JetColorTex";
+	JetTex->Filename = L"Textures/Jet.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), JetTex->Filename.c_str(),
+		JetTex->Resource, JetTex->UploadHeap));
+
+	mTextures[JetTex->Name] = std::move(JetTex);
+
+	//Jet2Color
+	auto Jet2Tex = std::make_unique<Texture>();
+	Jet2Tex->Name = "Jet2ColorTex";
+	Jet2Tex->Filename = L"Textures/Jet2.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), Jet2Tex->Filename.c_str(),
+		Jet2Tex->Resource, Jet2Tex->UploadHeap));
+
+	mTextures[Jet2Tex->Name] = std::move(Jet2Tex);
 }
 
 void Game::BuildRootSignature()
@@ -436,8 +457,8 @@ void Game::BuildDescriptorHeaps()
 	//
 	CD3DX12_CPU_DESCRIPTOR_HANDLE hDescriptor(mSrvDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-	auto EagleTex = mTextures["EagleTex"]->Resource;
-	auto RaptorTex = mTextures["RaptorTex"]->Resource;
+	auto JetTex = mTextures["JetColorTex"]->Resource;
+	auto Jet2Tex = mTextures["Jet2ColorTex"]->Resource;
 	auto DesertTex = mTextures["DesertTex"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -448,7 +469,7 @@ void Game::BuildDescriptorHeaps()
 	//D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING  will not reorder the components and just return the data in the order it is stored in the texture resource.
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
-	srvDesc.Format = EagleTex->GetDesc().Format;
+	srvDesc.Format = JetTex->GetDesc().Format;
 
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MostDetailedMip = 0;
@@ -456,18 +477,18 @@ void Game::BuildDescriptorHeaps()
 	//specify a subrange of mipmap levels to view.You can specify - 1 to indicate to view
 	//all mipmap levels from MostDetailedMip down to the last mipmap level.
 
-	srvDesc.Texture2D.MipLevels = EagleTex->GetDesc().MipLevels;
+	srvDesc.Texture2D.MipLevels = JetTex->GetDesc().MipLevels;
 
 	//Specifies the minimum mipmap level that can be accessed. 0.0 means all the mipmap levels can be accessed.
 	//Specifying 3.0 means mipmap levels 3.0 to MipCount - 1 can be accessed.
 	srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
 
-	md3dDevice->CreateShaderResourceView(EagleTex.Get(), &srvDesc, hDescriptor);
+	md3dDevice->CreateShaderResourceView(JetTex.Get(), &srvDesc, hDescriptor);
 
 	//Raptor Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = RaptorTex->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(RaptorTex.Get(), &srvDesc, hDescriptor);
+	srvDesc.Format = Jet2Tex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(Jet2Tex.Get(), &srvDesc, hDescriptor);
 
 	//Desert Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
@@ -495,28 +516,74 @@ void Game::BuildShapeGeometry()
 {
 	GeometryGenerator geoGen;
 	GeometryGenerator::MeshData box = geoGen.CreateBox(1, 0, 1, 1);
+	GeometryGenerator::MeshData Eagle = geoGen.CreateJet("Models/Eagle.txt");
+	GeometryGenerator::MeshData Raptor = geoGen.CreateJet("Models/Raptor.txt");
+
+	UINT	BoxVertexOffset = 0;
+	UINT	EagleVertexOffset = (UINT)box.Vertices.size();
+	UINT	RaptorVertexOffset = EagleVertexOffset + (UINT)Eagle.Vertices.size();
+
+	UINT	BoxIndexOffset = 0;
+	UINT	EagleIndexOffset = (UINT)box.Indices32.size();
+	UINT	RaptorIndexOffset = EagleIndexOffset + (UINT)Eagle.Indices32.size();
+
+
 	SubmeshGeometry boxSubmesh;
 	boxSubmesh.IndexCount = (UINT)box.Indices32.size();
-	boxSubmesh.StartIndexLocation = 0;
-	boxSubmesh.BaseVertexLocation = 0;
+	boxSubmesh.StartIndexLocation = BoxIndexOffset;
+	boxSubmesh.BaseVertexLocation = BoxVertexOffset;
+
+	SubmeshGeometry EagleSubmesh;
+	EagleSubmesh.IndexCount = (UINT)Eagle.Indices32.size();
+	EagleSubmesh.StartIndexLocation = EagleIndexOffset;
+	EagleSubmesh.BaseVertexLocation = EagleVertexOffset;
+
+	SubmeshGeometry RaptorSubmesh;
+	RaptorSubmesh.IndexCount = (UINT)Raptor.Indices32.size();
+	RaptorSubmesh.StartIndexLocation = RaptorIndexOffset;
+	RaptorSubmesh.BaseVertexLocation = RaptorVertexOffset;
+
+	UINT	TotalVertexCount = (UINT)box.Vertices.size() + (UINT)Eagle.Vertices.size() + (UINT)Raptor.Vertices.size();
 
 
-	std::vector<Vertex> vertices(box.Vertices.size());
+	std::vector<Vertex> vertices(TotalVertexCount);
 
-	for (size_t i = 0; i < box.Vertices.size(); ++i)
+	size_t	BoxVertexCount = box.Vertices.size();
+	size_t	EagleVertexCount = Eagle.Vertices.size();
+	size_t	RaptorVertexCount = Raptor.Vertices.size();
+
+	for (size_t i = 0; i < BoxVertexCount; ++i)
 	{
 		vertices[i].Pos = box.Vertices[i].Position;
 		vertices[i].Normal = box.Vertices[i].Normal;
 		vertices[i].TexC = box.Vertices[i].TexC;
 	}
 
-	std::vector<std::uint16_t> indices = box.GetIndices16();
+	for (size_t i = 0; i < EagleVertexCount; ++i)
+	{
+		vertices[BoxVertexCount + i].Pos = Eagle.Vertices[i].Position;
+		vertices[BoxVertexCount + i].Normal = Eagle.Vertices[i].Normal;
+		vertices[BoxVertexCount + i].TexC = Eagle.Vertices[i].TexC;
+	}
+
+	for (size_t i = 0; i < RaptorVertexCount; ++i)
+	{
+		vertices[BoxVertexCount + EagleVertexCount + i].Pos = Raptor.Vertices[i].Position;
+		vertices[BoxVertexCount + EagleVertexCount + i].Normal = Raptor.Vertices[i].Normal;
+		vertices[BoxVertexCount + EagleVertexCount + i].TexC = Raptor.Vertices[i].TexC;
+	}
+
+	std::vector<std::uint16_t> indices;
+
+	indices.insert(indices.end(), std::begin(box.GetIndices16()), std::end(box.GetIndices16()));
+	indices.insert(indices.end(), std::begin(Eagle.GetIndices16()), std::end(Eagle.GetIndices16()));
+	indices.insert(indices.end(), std::begin(Raptor.GetIndices16()), std::end(Raptor.GetIndices16()));
 
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
 	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
 
 	auto geo = std::make_unique<MeshGeometry>();
-	geo->Name = "boxGeo";
+	geo->Name = "ShapeGeo";
 
 	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
 	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
@@ -536,6 +603,8 @@ void Game::BuildShapeGeometry()
 	geo->IndexBufferByteSize = ibByteSize;
 
 	geo->DrawArgs["box"] = boxSubmesh;
+	geo->DrawArgs["Eagle"] = EagleSubmesh;
+	geo->DrawArgs["Raptor"] = RaptorSubmesh;
 
 	mGeometries[geo->Name] = std::move(geo);
 }
@@ -584,6 +653,7 @@ void Game::BuildFrameResources()
 //step13
 void Game::BuildMaterials()
 {
+
 	auto Eagle = std::make_unique<Material>();
 	Eagle->Name = "Eagle";
 	Eagle->MatCBIndex = 0;

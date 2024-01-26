@@ -613,6 +613,88 @@ GeometryGenerator::MeshData GeometryGenerator::CreateGrid(float width, float dep
     return meshData;
 }
 
+GeometryGenerator::MeshData GeometryGenerator::CreateJet(const char* FileName)
+{
+	MeshData meshData;
+
+	FILE* File = nullptr;
+
+	fopen_s(&File, FileName, "rt");
+
+	if (!File)
+		return meshData;
+
+	int	VertexCount = 0;
+	int TriangleCount = 0;
+
+	char	readLine[256] = {};
+
+	fgets(readLine, 256, File);
+
+	VertexCount = atoi(readLine);
+
+	fgets(readLine, 256, File);
+
+	TriangleCount = atoi(readLine);
+
+	meshData.Vertices.resize(VertexCount);
+	meshData.Indices32.resize(TriangleCount * 3);
+
+	for (int i = 0; i < VertexCount; ++i)
+	{
+		fgets(readLine, 256, File);
+
+		char* Context = nullptr;
+		char* Temp = strtok_s(readLine, " ", &Context);
+		
+		meshData.Vertices[i].Position.x = atof(Temp);
+
+		Temp = strtok_s(nullptr, " ", &Context);
+
+		meshData.Vertices[i].Position.y = atof(Temp);
+
+		Temp = strtok_s(nullptr, " ", &Context);
+
+		meshData.Vertices[i].Position.z = atof(Temp);
+
+		Temp = strtok_s(nullptr, " ", &Context);
+
+		meshData.Vertices[i].Normal.x = atof(Temp);
+
+		Temp = strtok_s(nullptr, " ", &Context);
+
+		meshData.Vertices[i].Normal.y = atof(Temp);
+
+		Temp = strtok_s(nullptr, " ", &Context);
+
+		meshData.Vertices[i].Normal.z = atof(Temp);
+
+		meshData.Vertices[i].TexC = XMFLOAT2(0.f, 0.f);
+	}
+
+	for (int i = 0; i < TriangleCount; ++i)
+	{
+		fgets(readLine, 256, File);
+
+		char* Context = nullptr;
+		char* Temp = strtok_s(readLine, " ", &Context);
+
+		meshData.Indices32[i * 3] = atof(Temp);
+
+		Temp = strtok_s(nullptr, " ", &Context);
+
+		meshData.Indices32[i * 3 + 1] = atof(Temp);
+
+		Temp = strtok_s(nullptr, " ", &Context);
+
+		meshData.Indices32[i * 3 + 2] = atof(Temp);
+	}
+
+	fclose(File);
+
+	return meshData;
+}
+
 GeometryGenerator::MeshData GeometryGenerator::CreateQuad(float x, float y, float w, float h, float depth)
 {
     MeshData meshData;

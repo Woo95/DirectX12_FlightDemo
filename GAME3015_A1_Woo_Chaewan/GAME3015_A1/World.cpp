@@ -7,13 +7,13 @@ World::World(Game* game)
 	, mBackground(nullptr)
 	, mWorldBounds(-1.5f, 1.5f, 200.0f, 0.0f) //Left, Right, Down, Up
 	, mSpawnPosition(0.f, 0.f)
-	, mScrollSpeed(3.0f)
-	, mBackGroundXSize(6.0f)
+	, mScrollSpeed(5.0f)
+	, mBackGroundXSize(10.0f)
 	, mBackGroundZSize(100.0f)
 	, mBackGroundZStartPos(mBackGroundZSize / 2.0f - 2.5f)
 {
 }
-
+	
 World::~World()
 {
 	if (mSceneGraph)
@@ -26,8 +26,8 @@ void World::update(const GameTimer& gt)
 {
 	mSceneGraph->update(gt);
 
-	if (mBackground->getWorldPosition().z <= -mBackGroundZStartPos)
-		mBackground->setPosition(0.f, 0.f, mBackGroundZStartPos);
+	//if (mBackground->getWorldPosition().z <= -mBackGroundZStartPos)
+	//	mBackground->setPosition(0.f, 0.f, mBackGroundZStartPos);
 }
 
 void World::draw()
@@ -39,23 +39,24 @@ void World::buildScene()
 {
 	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, mGame));
 	mPlayerAircraft = player.get();
-	mPlayerAircraft->setPosition(0.0, 0.1, 0.0);
-	mPlayerAircraft->setScale(0.5, 0.5, 0.5);
-	mPlayerAircraft->setVelocity(1.f, 0.f);
+	mPlayerAircraft->setPosition(0.0, 1.0, 0.5);
+	mPlayerAircraft->setScale(1.0, 1.0, 1.0);
+	mPlayerAircraft->setWorldRotation(0.0, 0.0, 0.0);
+	mPlayerAircraft->setVelocity(2.f, 0.f);
 	mSceneGraph->attachChild(std::move(player));
 
 	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, mGame));
 	auto raptor = enemy1.get();
-	raptor->setPosition(0.5, 0, -0.5);
+	raptor->setPosition(1, 0, -1);
 	raptor->setScale(1.0, 1.0, 1.0);
-	raptor->setWorldRotation(0, 0, 0);
+	raptor->setWorldRotation(0.0, 0.0, 0.0);
 	mPlayerAircraft->attachChild(std::move(enemy1));
 
 	std::unique_ptr<Aircraft> enemy2(new Aircraft(Aircraft::Raptor, mGame));
 	auto raptor2 = enemy2.get();
-	raptor2->setPosition(-0.5, 0, -0.5);
+	raptor2->setPosition(-1, 0, -1);
 	raptor2->setScale(1.0, 1.0, 1.0);
-	raptor2->setWorldRotation(0, 0, 0);
+	raptor2->setWorldRotation(0.0, 0.0, 0.0);
 	mPlayerAircraft->attachChild(std::move(enemy2));
 
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mGame));
