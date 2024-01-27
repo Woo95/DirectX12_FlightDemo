@@ -516,8 +516,8 @@ void Game::BuildShapeGeometry()
 {
 	GeometryGenerator geoGen;
 	GeometryGenerator::MeshData box = geoGen.CreateBox(1, 0, 1, 1);
-	GeometryGenerator::MeshData Eagle = geoGen.CreateJet("Models/Eagle.txt");
-	GeometryGenerator::MeshData Raptor = geoGen.CreateJet("Models/Raptor.txt");
+	GeometryGenerator::MeshData Eagle = geoGen.CreateMesh("Models/Eagle.txt");
+	GeometryGenerator::MeshData Raptor = geoGen.CreateMesh("Models/Raptor.txt");
 
 	UINT	BoxVertexOffset = 0;
 	UINT	EagleVertexOffset = (UINT)box.Vertices.size();

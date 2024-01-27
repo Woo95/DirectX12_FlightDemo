@@ -27,16 +27,16 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 	switch (mType)
 	{
 	case (Eagle):	// move eagle
-		if (mWorldPosition.x >= 1.9f)
+		if (mWorldPosition.x >= 3)
 		{
-			mWorldPosition.x = 1.9f;
-			setVelocity(-1.f, 0.f);
+			mWorldPosition.x = 3;
+			setVelocity(-2.f, 0.f);
 		}
 
-		else if (mWorldPosition.x <= -1.9f)
+		else if (mWorldPosition.x <= -3)
 		{
-			mWorldPosition.x = -1.9f;
-			setVelocity(1.f, 0.f);
+			mWorldPosition.x = -3;
+			setVelocity(2.f, 0.f);
 		}
 		break;
 	}
@@ -51,11 +51,11 @@ void Aircraft::buildCurrent()
 	renderer->World = getTransform();
 	renderer->ObjCBIndex = game->getRenderItems().size();
 	renderer->Mat = game->getMaterials()[mSprite].get();
-	renderer->Geo = game->getGeometries()["boxGeo"].get();
+	renderer->Geo = game->getGeometries()["ShapeGeo"].get();
 	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
-	renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;
-	renderer->BaseVertexLocation = renderer->Geo->DrawArgs["box"].BaseVertexLocation;
+	renderer->IndexCount = renderer->Geo->DrawArgs[mSprite].IndexCount;
+	renderer->StartIndexLocation = renderer->Geo->DrawArgs[mSprite].StartIndexLocation;
+	renderer->BaseVertexLocation = renderer->Geo->DrawArgs[mSprite].BaseVertexLocation;
 
 	game->getRenderItems().push_back(std::move(render));
 }

@@ -23,7 +23,7 @@ void SpriteNode::buildCurrent()
 	XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(1.0f, mWorldScaling.z / 10.f, 1.0f));	// worldScale / 10.0f amount of desert texture
 	renderer->ObjCBIndex = game->getRenderItems().size();
 	renderer->Mat = game->getMaterials()["Desert"].get();
-	renderer->Geo = game->getGeometries()["boxGeo"].get();
+	renderer->Geo = game->getGeometries()["ShapeGeo"].get();
 	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
 	renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;

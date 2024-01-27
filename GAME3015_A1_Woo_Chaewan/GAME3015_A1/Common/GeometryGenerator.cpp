@@ -613,7 +613,7 @@ GeometryGenerator::MeshData GeometryGenerator::CreateGrid(float width, float dep
     return meshData;
 }
 
-GeometryGenerator::MeshData GeometryGenerator::CreateJet(const char* FileName)
+GeometryGenerator::MeshData GeometryGenerator::CreateMesh(const char* FileName)
 {
 	MeshData meshData;
 

@@ -107,7 +107,7 @@ public:
 
 	
 
-	MeshData CreateJet(const char* FileName);
+	MeshData CreateMesh(const char* FileName);
 
 	///<summary>
 	/// Creates a quad aligned with the screen.  This is useful for postprocessing and screen effects.
