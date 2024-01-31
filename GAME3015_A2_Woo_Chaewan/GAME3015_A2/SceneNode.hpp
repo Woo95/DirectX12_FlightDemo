@@ -5,6 +5,8 @@
 #include "Common/GeometryGenerator.h"
 #include "Common/Camera.h"
 #include "FrameResource.h"
+#include "Category.hpp"
+#include "Command.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -130,6 +132,9 @@ public:
 	*/
 	XMFLOAT4X4				getTransform() const;
 
+	void					onCommand(const Command& command, const GameTimer& gt);
+	virtual unsigned int	getCategory() const;
+
 	/**
 	* @brief Move current instance by x,y,z
 	*/
@@ -166,6 +171,7 @@ private:
 protected:
 	Game* game;
 	RenderItem* renderer;
+
 protected:
 	XMFLOAT3				mWorldPosition;
 	XMFLOAT3				mWorldRotation;

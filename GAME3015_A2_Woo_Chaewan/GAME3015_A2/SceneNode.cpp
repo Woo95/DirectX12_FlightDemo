@@ -149,6 +149,22 @@ XMFLOAT4X4 SceneNode::getTransform() const
 	return transform;
 }
 
+void SceneNode::onCommand(const Command& command, const GameTimer& gt)
+{
+	// Command current node, if category matches
+	if (command.category & getCategory())
+		command.action(*this, gt);
+
+	// Command children
+	for (Ptr& child : mChildren)
+		child->onCommand(command, gt);
+}
+
+unsigned int SceneNode::getCategory() const
+{
+	return Category::Scene;
+}
+
 void SceneNode::move(float x, float y, float z)
 {
 	mWorldPosition.x += x;

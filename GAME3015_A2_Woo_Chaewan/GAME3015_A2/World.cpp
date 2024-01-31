@@ -24,10 +24,15 @@ World::~World()
 
 void World::update(const GameTimer& gt)
 {
-	mSceneGraph->update(gt);
+	mBackground->setVelocity(0, -mScrollSpeed);
 
 	//if (mBackground->getWorldPosition().z <= -mBackGroundZStartPos)
 	//	mBackground->setPosition(0.f, 0.f, mBackGroundZStartPos);
+
+	mSceneGraph->update(gt);
+
+	while (!mCommandQueue.isEmpty())
+		mSceneGraph->onCommand(mCommandQueue.pop(), gt);
 }
 
 void World::draw()
@@ -42,7 +47,7 @@ void World::buildScene()
 	mPlayerAircraft->setPosition(0.0, 1.0, 0.5);
 	mPlayerAircraft->setScale(1.0, 1.0, 1.0);
 	mPlayerAircraft->setWorldRotation(0.0, 0.0, 0.0);
-	mPlayerAircraft->setVelocity(2.f, 0.f);
+	//mPlayerAircraft->setVelocity(2.f, 0.f);
 	mSceneGraph->attachChild(std::move(player));
 
 	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, mGame));
@@ -64,8 +69,13 @@ void World::buildScene()
 	//mBackground->setPosition(mWorldBounds.left, mWorldBounds.top);
 	mBackground->setPosition(0, 0, mBackGroundZStartPos);
 	mBackground->setScale(mBackGroundXSize, 1.0, mBackGroundZSize);
-	mBackground->setVelocity(0, -mScrollSpeed);
+	//mBackground->setVelocity(0, -mScrollSpeed);
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
 	mSceneGraph->build();
+}
+
+CommandQueue& World::getCommandQueue()
+{
+	return mCommandQueue;
 }

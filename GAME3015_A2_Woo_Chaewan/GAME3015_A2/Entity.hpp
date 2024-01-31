@@ -31,6 +31,8 @@ public:
 	 * @brief Get the velocity of the Entity
 	 */
 	XMFLOAT2			getVelocity() const;
+	void				accelerate(XMFLOAT2 velocity);
+	void				accelerate(float vx, float vy);
 
 	/**
 	* @brief Invoke the Entity instance's update routine on each frame

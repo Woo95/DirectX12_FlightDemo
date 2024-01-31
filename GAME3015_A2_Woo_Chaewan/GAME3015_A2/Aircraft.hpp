@@ -40,6 +40,7 @@ private:
 	* @brief Setting up the aircraft instance data
 	*/
 	virtual void		buildCurrent();
+	virtual unsigned int	getCategory() const;
 
 
 private:

@@ -72,6 +72,9 @@
     <ClCompile Include="CommandQueue.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\d3dApp.h">
@@ -129,6 +132,9 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="CommandQueue.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>

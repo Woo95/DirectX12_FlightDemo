@@ -26,17 +26,23 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 {
 	switch (mType)
 	{
-	case (Eagle):	// move eagle
-		if (mWorldPosition.x >= 3)
+	case (Eagle):	// eagle boundary
+		if (mWorldPosition.x >= 2.9f)
 		{
-			mWorldPosition.x = 3;
-			setVelocity(-2.f, 0.f);
+			mWorldPosition.x = 2.9f;
+		}
+		else if (mWorldPosition.x <= -2.9f)
+		{
+			mWorldPosition.x = -2.9f;
 		}
 
-		else if (mWorldPosition.x <= -3)
+		if (mWorldPosition.z <= -0.1f)
 		{
-			mWorldPosition.x = -3;
-			setVelocity(2.f, 0.f);
+			mWorldPosition.z = -0.1f;
+		}
+		else if (mWorldPosition.z >= 4.2f)
+		{
+			mWorldPosition.z = 4.2f;
 		}
 		break;
 	}
@@ -58,4 +64,16 @@ void Aircraft::buildCurrent()
 	renderer->BaseVertexLocation = renderer->Geo->DrawArgs[mSprite].BaseVertexLocation;
 
 	game->getRenderItems().push_back(std::move(render));
+}
+
+unsigned int Aircraft::getCategory() const
+{
+	switch (mType)
+	{
+	case Eagle:
+		return Category::PlayerAircraft;
+
+	default:
+		return Category::EnemyAircraft;
+	}
 }

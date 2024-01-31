@@ -2,6 +2,7 @@
 #include "SceneNode.hpp"
 #include "Aircraft.hpp"
 #include "SpriteNode.h"
+#include "CommandQueue.h"
 
 /**
  * @brief World class that handles update, draw, and building the game world
@@ -32,6 +33,7 @@ public:
 	* @brief Builds the initial scene for the game
 	*/
 	void								buildScene();
+	CommandQueue& getCommandQueue();
 
 
 private:
@@ -48,6 +50,7 @@ private:
 
 	SceneNode* mSceneGraph;
 	std::array<SceneNode*, LayerCount>	mSceneLayers;
+	CommandQueue						mCommandQueue;
 
 	XMFLOAT4							mWorldBounds;
 	XMFLOAT2		    				mSpawnPosition;

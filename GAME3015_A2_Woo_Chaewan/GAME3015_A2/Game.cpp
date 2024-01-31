@@ -185,6 +185,16 @@ void Game::OnMouseMove(WPARAM btnState, int x, int y)
 
 void Game::OnKeyboardInput(const GameTimer& gt)
 {
+	mCamera.UpdateViewMatrix();
+
+	CommandQueue& commands = mWorld.getCommandQueue();
+	
+	mPlayer.handleEvent(commands);
+
+	mPlayer.handleRealtimeInput(commands);
+
+	// Camera Control //
+
 	const float dt = gt.DeltaTime();
 
 	mCamera.GetLook();
@@ -200,10 +210,8 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 		if (!hit)
 		{
 			mCamera.Walk(10.0f * dt);
-
 		}
 	}
-
 	if (GetAsyncKeyState('S') & 0x8000)
 	{
 		bool hit = false;
@@ -211,7 +219,6 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 		{
 			mCamera.Walk(-10.0f * dt);
 		}
-
 	}
 	if (GetAsyncKeyState('A') & 0x8000)
 	{
@@ -220,8 +227,6 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 		{
 			mCamera.Strafe(-10.0f * dt);
 		}
-
-
 	}
 	if (GetAsyncKeyState('D') & 0x8000)
 	{
@@ -231,9 +236,9 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 			mCamera.Strafe(10.0f * dt);
 		}
 	}
-
-
 	mCamera.UpdateViewMatrix();
+
+	// Camera Control //
 }
 
 void Game::UpdateCamera(const GameTimer& gt)

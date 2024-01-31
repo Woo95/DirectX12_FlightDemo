@@ -2,6 +2,7 @@
 #include "Common/d3dApp.h"
 #include "Common/Camera.h"
 #include "World.hpp"
+#include "Player.h"
 
 /**
  * @brief Game class that represents the main application
@@ -40,6 +41,7 @@ private:
 	* @brief Updates the Game instance
 	*/
 	virtual void Update(const GameTimer& gt)override;
+
 	/**
 	* @brief Draw the Game instance
 	*/
@@ -185,6 +187,7 @@ private:
 	POINT mLastMousePos;
 	Camera mCamera;
 	World mWorld;
+	Player					mPlayer;
 
 public:
 	std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }
