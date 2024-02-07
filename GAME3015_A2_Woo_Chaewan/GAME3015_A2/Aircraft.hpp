@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.hpp"
+#include "CommandQueue.h"
 #include <string>
 
 /**
@@ -41,6 +42,10 @@ private:
 	*/
 	virtual void		buildCurrent();
 	virtual unsigned int	getCategory() const;
+	void checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands);
+
+public:
+	void launchMissile();
 
 
 private:

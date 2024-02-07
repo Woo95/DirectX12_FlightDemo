@@ -47,6 +47,8 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 		break;
 	}
 
+	//checkProjectileLaunch(gt, )
+
 	Entity::updateCurrent(gt);
 }
 
@@ -76,4 +78,12 @@ unsigned int Aircraft::getCategory() const
 	default:
 		return Category::EnemyAircraft;
 	}
+}
+
+void Aircraft::checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands)
+{
+}
+
+void Aircraft::launchMissile()
+{
 }

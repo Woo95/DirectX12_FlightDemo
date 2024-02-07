@@ -21,10 +21,11 @@ struct AircraftMover
 Player::Player()
 {
 	// Set initial key bindings
-	mKeyBinding[VK_LEFT] = MoveLeft;
-	mKeyBinding[VK_RIGHT] = MoveRight;
-	mKeyBinding[VK_DOWN] = MoveDown;
-	mKeyBinding[VK_UP] = MoveUp;
+	mKeyBinding[VK_LEFT] = ActionData(MoveLeft);
+	mKeyBinding[VK_RIGHT] = ActionData(MoveRight);
+	mKeyBinding[VK_DOWN] = ActionData(MoveDown);
+	mKeyBinding[VK_UP] = ActionData(MoveUp);
+	mKeyBinding[VK_SPACE] = ActionData(Missile);
 
 	// Set initial action bindings
 	initializeActions();
@@ -34,22 +35,52 @@ Player::Player()
 		pair.second.category = Category::PlayerAircraft;
 }
 
+// Make Key State
+void Player::InputEvent()
+{
+	for (auto& pair : mKeyBinding)
+	{
+		if (GetAsyncKeyState(pair.first) & 0x8000)
+		{
+			// first press
+			if (!pair.second.Press && !pair.second.Hold)
+			{
+				pair.second.Press = true;
+				pair.second.Hold = true;
+			}
+
+			else
+				pair.second.Press = false;
+		}
+
+		else if (pair.second.Hold)
+		{
+			pair.second.Press = false;
+			pair.second.Hold = false;
+			pair.second.Release = true;
+		}
+
+		else if (pair.second.Release)
+			pair.second.Release = false;
+	}
+}
+
 void Player::handleEvent(CommandQueue& commands)
 {
 	for (auto pair : mKeyBinding)
 	{
-		if (GetAsyncKeyState(pair.first) & 0x8000 && !isRealtimeAction(pair.second))
-			commands.push(mActionBinding[pair.second]);
+		if (pair.second.Press && !isRealtimeAction(pair.second.action))
+			commands.push(mActionBinding[pair.second.action]);
 	}
 }
 
-void Player::handleRealtimeInput(CommandQueue& commands)
+void Player::handleRealtimeEvent(CommandQueue& commands)
 {
 	// Traverse all assigned keys and check if they are pressed
 	for (auto pair : mKeyBinding)
 	{
-		if (GetAsyncKeyState(pair.first) & 0x8000 && isRealtimeAction(pair.second))
-			commands.push(mActionBinding[pair.second]);
+		if (pair.second.Hold && isRealtimeAction(pair.second.action))
+			commands.push(mActionBinding[pair.second.action]);
 	}
 }
 
@@ -58,7 +89,7 @@ void Player::assignKey(Action action, const unsigned char Key)
 	// Remove all keys that already map to action
 	for (auto itr = mKeyBinding.begin(); itr != mKeyBinding.end(); )
 	{
-		if (itr->second == action)
+		if (itr->second.action == action)
 			mKeyBinding.erase(itr++);
 		else
 			++itr;
@@ -72,7 +103,7 @@ unsigned char Player::getAssignedKey(Action action) const
 {
 	for (auto pair : mKeyBinding)
 	{
-		if (pair.second == action)
+		if (pair.second.action == action)
 			return pair.first;
 	}
 
@@ -87,6 +118,8 @@ void Player::initializeActions()
 	mActionBinding[MoveRight].action = derivedAction<Aircraft>(AircraftMover(+playerSpeed, 0.f));
 	mActionBinding[MoveUp].action = derivedAction<Aircraft>(AircraftMover(0.f, playerSpeed));
 	mActionBinding[MoveDown].action = derivedAction<Aircraft>(AircraftMover(0.f, -playerSpeed));
+
+	mActionBinding[Missile].action = derivedAction<Aircraft>([](Aircraft& a, const GameTimer& gt) { a.launchMissile(); });
 }
 
 bool Player::isRealtimeAction(Action action)
@@ -102,6 +135,10 @@ bool Player::isRealtimeAction(Action action)
 	default:
 		return false;
 	}
+}
+
+void Player::MissileInput(SceneNode& node, const GameTimer& gt)
+{
 }
 
 #pragma endregion

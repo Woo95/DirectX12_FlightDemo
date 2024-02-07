@@ -189,9 +189,11 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 
 	CommandQueue& commands = mWorld.getCommandQueue();
 	
+	mPlayer.InputEvent();
+
 	mPlayer.handleEvent(commands);
 
-	mPlayer.handleRealtimeInput(commands);
+	mPlayer.handleRealtimeEvent(commands);
 
 	// Camera Control //
 
