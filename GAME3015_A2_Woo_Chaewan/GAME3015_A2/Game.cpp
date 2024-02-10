@@ -404,14 +404,14 @@ void Game::LoadTextures()
 	mTextures[Jet2Tex->Name] = std::move(Jet2Tex);
 
 	//Missile
-	/*auto MissileTex = std::make_unique<Texture>();
+	auto MissileTex = std::make_unique<Texture>();
 	MissileTex->Name = "MissileTex";
 	MissileTex->Filename = L"Textures/Missile.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), MissileTex->Filename.c_str(),
 		MissileTex->Resource, MissileTex->UploadHeap));
 
-	mTextures[MissileTex->Name] = std::move(MissileTex);*/
+	mTextures[MissileTex->Name] = std::move(MissileTex);
 }
 
 void Game::BuildRootSignature()
@@ -477,7 +477,7 @@ void Game::BuildDescriptorHeaps()
 	auto JetTex = mTextures["JetColorTex"]->Resource;
 	auto Jet2Tex = mTextures["Jet2ColorTex"]->Resource;
 	auto DesertTex = mTextures["DesertTex"]->Resource;
-	auto MissileTex = mTextures["EagleTex"]->Resource;
+	auto MissileTex = mTextures["MissileTex"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
