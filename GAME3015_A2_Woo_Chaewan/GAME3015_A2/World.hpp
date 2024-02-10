@@ -35,6 +35,11 @@ public:
 	void								buildScene();
 	CommandQueue& getCommandQueue();
 
+	SceneNode* GetSceneGraph()
+	{
+		return mSceneGraph;
+	}
+
 
 private:
 	enum Layer

@@ -157,7 +157,9 @@ void SceneNode::onCommand(const Command& command, const GameTimer& gt)
 
 	// Command children
 	for (Ptr& child : mChildren)
+	{
 		child->onCommand(command, gt);
+	}
 }
 
 unsigned int SceneNode::getCategory() const

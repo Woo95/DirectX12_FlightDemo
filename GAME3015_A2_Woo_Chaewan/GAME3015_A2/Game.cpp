@@ -402,6 +402,16 @@ void Game::LoadTextures()
 		Jet2Tex->Resource, Jet2Tex->UploadHeap));
 
 	mTextures[Jet2Tex->Name] = std::move(Jet2Tex);
+
+	//Missile
+	/*auto MissileTex = std::make_unique<Texture>();
+	MissileTex->Name = "MissileTex";
+	MissileTex->Filename = L"Textures/Missile.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), MissileTex->Filename.c_str(),
+		MissileTex->Resource, MissileTex->UploadHeap));
+
+	mTextures[MissileTex->Name] = std::move(MissileTex);*/
 }
 
 void Game::BuildRootSignature()
@@ -454,7 +464,7 @@ void Game::BuildDescriptorHeaps()
 	// Create the SRV heap.
 	//
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
-	srvHeapDesc.NumDescriptors = 3;
+	srvHeapDesc.NumDescriptors = 4;
 	srvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
 	srvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
 	ThrowIfFailed(md3dDevice->CreateDescriptorHeap(&srvHeapDesc, IID_PPV_ARGS(&mSrvDescriptorHeap)));
@@ -467,6 +477,7 @@ void Game::BuildDescriptorHeaps()
 	auto JetTex = mTextures["JetColorTex"]->Resource;
 	auto Jet2Tex = mTextures["Jet2ColorTex"]->Resource;
 	auto DesertTex = mTextures["DesertTex"]->Resource;
+	auto MissileTex = mTextures["EagleTex"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -501,6 +512,11 @@ void Game::BuildDescriptorHeaps()
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = DesertTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(DesertTex.Get(), &srvDesc, hDescriptor);
+
+	//Missile Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = MissileTex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(MissileTex.Get(), &srvDesc, hDescriptor);
 
 }
 
@@ -654,7 +670,7 @@ void Game::BuildFrameResources()
 	for (int i = 0; i < gNumFrameResources; ++i)
 	{
 		mFrameResources.push_back(std::make_unique<FrameResource>(md3dDevice.Get(),
-			1, (UINT)mAllRitems.size(), (UINT)mMaterials.size()));
+			1, 200, (UINT)mMaterials.size()));
 	}
 }
 //step13
@@ -691,6 +707,16 @@ void Game::BuildMaterials()
 
 	mMaterials["Desert"] = std::move(Desert);
 
+	auto Missile = std::make_unique<Material>();
+	Missile->Name = "Missile";
+	Missile->MatCBIndex = 3;
+	Missile->DiffuseSrvHeapIndex = 3;
+	Missile->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	Missile->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	Missile->Roughness = 0.2f;
+
+	mMaterials["Missile"] = std::move(Missile);
+
 }
 
 void Game::BuildRenderItems()
@@ -714,6 +740,9 @@ void Game::DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector
 	for (size_t i = 0; i < ritems.size(); ++i)
 	{
 		auto ri = ritems[i];
+
+		if (i == 4)
+			int a = 0;
 
 		cmdList->IASetVertexBuffers(0, 1, &ri->Geo->VertexBufferView());
 		cmdList->IASetIndexBuffer(&ri->Geo->IndexBufferView());

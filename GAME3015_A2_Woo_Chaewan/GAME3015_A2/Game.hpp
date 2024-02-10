@@ -190,7 +190,14 @@ private:
 	Player					mPlayer;
 
 public:
+	World* GetWorld()
+	{
+		return &mWorld;
+	}
+
+public:
 	std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }
+	std::vector<RenderItem*>& getRenderOpaqueItems() { return mOpaqueRitems; }
 	std::unordered_map<std::string, std::unique_ptr<Material>>& getMaterials() { return mMaterials; }
 	std::unordered_map<std::string, std::unique_ptr<MeshGeometry>>& getGeometries() { return mGeometries; }
 };

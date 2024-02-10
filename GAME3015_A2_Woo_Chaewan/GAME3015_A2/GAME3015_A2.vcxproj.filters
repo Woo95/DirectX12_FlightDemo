@@ -75,6 +75,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Logic</Filter>
     </ClCompile>
+    <ClCompile Include="Missile.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common\d3dApp.h">
@@ -135,6 +138,9 @@
       <Filter>Logic</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Logic</Filter>
+    </ClInclude>
+    <ClInclude Include="Missile.h">
       <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>

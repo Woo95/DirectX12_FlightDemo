@@ -29,10 +29,10 @@ void World::update(const GameTimer& gt)
 	//if (mBackground->getWorldPosition().z <= -mBackGroundZStartPos)
 	//	mBackground->setPosition(0.f, 0.f, mBackGroundZStartPos);
 
-	mSceneGraph->update(gt);
-
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph->onCommand(mCommandQueue.pop(), gt);
+
+	mSceneGraph->update(gt);
 }
 
 void World::draw()

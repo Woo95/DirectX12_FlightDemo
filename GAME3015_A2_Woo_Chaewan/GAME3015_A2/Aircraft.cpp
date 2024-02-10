@@ -1,5 +1,7 @@
 #include "Aircraft.hpp"
 #include "Game.hpp"
+#include "Missile.h"
+#include "World.hpp"
 
 Aircraft::Aircraft(Type type, Game* game) : Entity(game)
 	, mType(type)
@@ -86,4 +88,14 @@ void Aircraft::checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands
 
 void Aircraft::launchMissile()
 {
+	std::unique_ptr<Missile> MissileInstance(new Missile(game));
+	XMFLOAT3	Pos = mWorldPosition;
+	Pos.z += 1.f;
+	MissileInstance->setPosition(Pos.x, Pos.y, Pos.z);
+	MissileInstance->setScale(1.0, 1.0, 1.0);
+	MissileInstance->setWorldRotation(0.0, 0.0, 0.0);
+	MissileInstance->setVelocity(0.f, 3.f);
+	MissileInstance->build();
+	attachChild(std::move(MissileInstance));
+	//game->GetWorld()->GetSceneGraph()->attachChild(std::move(MissileInstance));
 }
