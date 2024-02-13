@@ -88,14 +88,20 @@ void Aircraft::checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands
 
 void Aircraft::launchMissile()
 {
+	game->GetWorld()->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
+}
+
+void Aircraft::CreateMissile()
+{
 	std::unique_ptr<Missile> MissileInstance(new Missile(game));
 	XMFLOAT3	Pos = mWorldPosition;
 	Pos.z += 1.f;
-	MissileInstance->setPosition(Pos.x, Pos.y, Pos.z);
-	MissileInstance->setScale(1.0, 1.0, 1.0);
+	MissileInstance->setPosition(Pos.x, Pos.y, Pos.z + 1.0);
+	//MissileInstance->setPosition(0.0, 0.0, 1.0);
+	MissileInstance->setScale(0.5, 1.0, 0.5);
 	MissileInstance->setWorldRotation(0.0, 0.0, 0.0);
 	MissileInstance->setVelocity(0.f, 3.f);
 	MissileInstance->build();
-	attachChild(std::move(MissileInstance));
-	//game->GetWorld()->GetSceneGraph()->attachChild(std::move(MissileInstance));
+	//attachChild(std::move(MissileInstance));
+	game->GetWorld()->GetSceneGraph()->attachChild(std::move(MissileInstance));
 }

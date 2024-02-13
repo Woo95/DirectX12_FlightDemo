@@ -32,6 +32,12 @@ void World::update(const GameTimer& gt)
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph->onCommand(mCommandQueue.pop(), gt);
 
+	while (!mPostCommandQueue.empty())
+	{
+		mPostCommandQueue.front()();
+		mPostCommandQueue.pop();
+	}
+
 	mSceneGraph->update(gt);
 }
 

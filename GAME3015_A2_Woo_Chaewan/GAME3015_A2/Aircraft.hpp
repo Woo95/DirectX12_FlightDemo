@@ -46,9 +46,11 @@ private:
 
 public:
 	void launchMissile();
+	void CreateMissile();
 
 
 private:
 	Type				mType;
 	std::string			mSprite;
+	bool				mLaunchMissile;
 };

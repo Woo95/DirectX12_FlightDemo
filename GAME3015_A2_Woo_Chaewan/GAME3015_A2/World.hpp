@@ -3,6 +3,7 @@
 #include "Aircraft.hpp"
 #include "SpriteNode.h"
 #include "CommandQueue.h"
+#include <queue>
 
 /**
  * @brief World class that handles update, draw, and building the game world
@@ -49,6 +50,13 @@ private:
 		LayerCount
 	};
 
+public:
+	template <typename T>
+	void AddPostCommandQueue(T* Obj, void(T::* Func)())
+	{
+		mPostCommandQueue.push(std::bind(Func, Obj));
+	}
+
 
 private:
 	Game* mGame;
@@ -66,4 +74,5 @@ private:
 	float								mBackGroundZSize;
 	float								mBackGroundZStartPos;
 	Aircraft* mEnemy;
+	std::queue<std::function<void()>>			mPostCommandQueue;
 };
