@@ -139,7 +139,13 @@ private:
 	 */
 	void DrawRenderItems(ID3D12GraphicsCommandList* cmdList, const std::vector<RenderItem*>& ritems);
 
+	/**
+	* @brief Get Hills Height
+	*/
 	float GetHillsHeight(float x, float z)const;
+	/**
+	* @brief Get Hills Normal
+	*/
 	XMFLOAT3 GetHillsNormal(float x, float z)const;
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
