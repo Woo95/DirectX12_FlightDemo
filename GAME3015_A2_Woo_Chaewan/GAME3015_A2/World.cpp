@@ -7,7 +7,7 @@ World::World(Game* game)
 	, mBackground(nullptr)
 	, mWorldBounds(-1.5f, 1.5f, 200.0f, 0.0f) //Left, Right, Down, Up
 	, mSpawnPosition(0.f, 0.f)
-	, mScrollSpeed(5.0f)
+	, mScrollSpeed(15.0f)
 	, mBackGroundXSize(10.0f)
 	, mBackGroundZSize(100.0f)
 	, mBackGroundZStartPos(mBackGroundZSize / 2.0f - 2.5f)
@@ -74,7 +74,7 @@ void World::buildScene()
 	mBackground = backgroundSprite.get();
 	//mBackground->setPosition(mWorldBounds.left, mWorldBounds.top);
 	mBackground->setPosition(0, 0, mBackGroundZStartPos);
-	mBackground->setScale(1.0, 0.2, 1.0);
+	mBackground->setScale(1.0, 0.4, 1.0);
 	mBackground->setVelocity(0, -mScrollSpeed);
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
