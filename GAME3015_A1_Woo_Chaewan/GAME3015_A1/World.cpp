@@ -39,7 +39,7 @@ void World::buildScene()
 {
 	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, mGame));
 	mPlayerAircraft = player.get();
-	mPlayerAircraft->setPosition(0.0, 1.0, 0.5);
+	mPlayerAircraft->setPosition(0.0, 15.0, 0.5);
 	mPlayerAircraft->setScale(1.0, 1.0, 1.0);
 	mPlayerAircraft->setWorldRotation(0.0, 0.0, 0.0);
 	mPlayerAircraft->setVelocity(2.f, 0.f);
@@ -63,7 +63,7 @@ void World::buildScene()
 	mBackground = backgroundSprite.get();
 	//mBackground->setPosition(mWorldBounds.left, mWorldBounds.top);
 	mBackground->setPosition(0, 0, mBackGroundZStartPos);
-	mBackground->setScale(mBackGroundXSize, 1.0, mBackGroundZSize);
+	mBackground->setScale(1.0, 0.2, 1.0);
 	mBackground->setVelocity(0, -mScrollSpeed);
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 

@@ -20,8 +20,8 @@ bool Game::Initialize()
 		return false;
 
 
-	mCamera.SetPosition(0, 9, 1.5);
-	mCamera.Pitch(3.14 / 2);
+	mCamera.SetPosition(0, 17, -6.5);
+	mCamera.Pitch(3.14 / 16);
 
 	// Reset the command list to prep for initialization commands.
 	ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
@@ -250,8 +250,6 @@ void Game::UpdateCamera(const GameTimer& gt)
 
 	//XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
 	//XMStoreFloat4x4(&mView, view);
-
-
 }
 
 void Game::AnimateMaterials(const GameTimer& gt)
@@ -518,16 +516,19 @@ void Game::BuildShapeGeometry()
 	GeometryGenerator::MeshData box = geoGen.CreateBox(1, 0, 1, 1);
 	GeometryGenerator::MeshData Eagle = geoGen.CreateMesh("Models/Eagle.txt");
 	GeometryGenerator::MeshData Raptor = geoGen.CreateMesh("Models/Raptor.txt");
+	GeometryGenerator::MeshData grid = geoGen.CreateGrid(460.0f, 460.0f, 50, 50);
 
-	UINT	BoxVertexOffset = 0;
-	UINT	EagleVertexOffset = (UINT)box.Vertices.size();
-	UINT	RaptorVertexOffset = EagleVertexOffset + (UINT)Eagle.Vertices.size();
+	UINT BoxVertexOffset = 0;
+	UINT EagleVertexOffset = (UINT)box.Vertices.size();
+	UINT RaptorVertexOffset = EagleVertexOffset + (UINT)Eagle.Vertices.size();
+	UINT GridVertexOffset = RaptorVertexOffset + (UINT)Raptor.Vertices.size();
 
-	UINT	BoxIndexOffset = 0;
-	UINT	EagleIndexOffset = (UINT)box.Indices32.size();
-	UINT	RaptorIndexOffset = EagleIndexOffset + (UINT)Eagle.Indices32.size();
+	UINT BoxIndexOffset = 0;
+	UINT EagleIndexOffset = (UINT)box.Indices32.size();
+	UINT RaptorIndexOffset = EagleIndexOffset + (UINT)Eagle.Indices32.size();
+	UINT GridIndexOffset = RaptorIndexOffset + (UINT)Raptor.Indices32.size();
 
-
+	// Update submeshes
 	SubmeshGeometry boxSubmesh;
 	boxSubmesh.IndexCount = (UINT)box.Indices32.size();
 	boxSubmesh.StartIndexLocation = BoxIndexOffset;
@@ -543,15 +544,23 @@ void Game::BuildShapeGeometry()
 	RaptorSubmesh.StartIndexLocation = RaptorIndexOffset;
 	RaptorSubmesh.BaseVertexLocation = RaptorVertexOffset;
 
-	UINT	TotalVertexCount = (UINT)box.Vertices.size() + (UINT)Eagle.Vertices.size() + (UINT)Raptor.Vertices.size();
+	SubmeshGeometry gridSubmesh;
+	gridSubmesh.IndexCount = (UINT)grid.Indices32.size();
+	gridSubmesh.StartIndexLocation = GridIndexOffset;
+	gridSubmesh.BaseVertexLocation = GridVertexOffset;
 
+	// Total vertex count
+	UINT TotalVertexCount = (UINT)(box.Vertices.size() + Eagle.Vertices.size() + Raptor.Vertices.size() + grid.Vertices.size());
 
+	// Update vertices
 	std::vector<Vertex> vertices(TotalVertexCount);
 
-	size_t	BoxVertexCount = box.Vertices.size();
-	size_t	EagleVertexCount = Eagle.Vertices.size();
-	size_t	RaptorVertexCount = Raptor.Vertices.size();
+	size_t BoxVertexCount = box.Vertices.size();
+	size_t EagleVertexCount = Eagle.Vertices.size();
+	size_t RaptorVertexCount = Raptor.Vertices.size();
+	size_t GridVertexCount = grid.Vertices.size();
 
+	// Copy vertices
 	for (size_t i = 0; i < BoxVertexCount; ++i)
 	{
 		vertices[i].Pos = box.Vertices[i].Position;
@@ -573,11 +582,22 @@ void Game::BuildShapeGeometry()
 		vertices[BoxVertexCount + EagleVertexCount + i].TexC = Raptor.Vertices[i].TexC;
 	}
 
+	for (size_t i = 0; i < GridVertexCount; ++i)
+	{
+		auto& p = grid.Vertices[i].Position;
+		vertices[BoxVertexCount + EagleVertexCount + RaptorVertexCount + i].Pos = p;
+		vertices[BoxVertexCount + EagleVertexCount + RaptorVertexCount + i].Pos.y = GetHillsHeight(p.x, p.z);
+		vertices[BoxVertexCount + EagleVertexCount + RaptorVertexCount + i].Normal = GetHillsNormal(p.x, p.z);
+		vertices[BoxVertexCount + EagleVertexCount + RaptorVertexCount + i].TexC = grid.Vertices[i].TexC;
+	}
+
+	// Update indices
 	std::vector<std::uint16_t> indices;
 
 	indices.insert(indices.end(), std::begin(box.GetIndices16()), std::end(box.GetIndices16()));
 	indices.insert(indices.end(), std::begin(Eagle.GetIndices16()), std::end(Eagle.GetIndices16()));
 	indices.insert(indices.end(), std::begin(Raptor.GetIndices16()), std::end(Raptor.GetIndices16()));
+	indices.insert(indices.end(), std::begin(grid.GetIndices16()), std::end(grid.GetIndices16()));
 
 	const UINT vbByteSize = (UINT)vertices.size() * sizeof(Vertex);
 	const UINT ibByteSize = (UINT)indices.size() * sizeof(std::uint16_t);
@@ -585,26 +605,27 @@ void Game::BuildShapeGeometry()
 	auto geo = std::make_unique<MeshGeometry>();
 	geo->Name = "ShapeGeo";
 
+	// Vertex and index buffers creation
 	ThrowIfFailed(D3DCreateBlob(vbByteSize, &geo->VertexBufferCPU));
 	CopyMemory(geo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
 
 	ThrowIfFailed(D3DCreateBlob(ibByteSize, &geo->IndexBufferCPU));
 	CopyMemory(geo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
 
-	geo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
-		mCommandList.Get(), vertices.data(), vbByteSize, geo->VertexBufferUploader);
+	geo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(), mCommandList.Get(), vertices.data(), vbByteSize, geo->VertexBufferUploader);
+	geo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(), mCommandList.Get(), indices.data(), ibByteSize, geo->IndexBufferUploader);
 
-	geo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
-		mCommandList.Get(), indices.data(), ibByteSize, geo->IndexBufferUploader);
-
+	// Geometry properties
 	geo->VertexByteStride = sizeof(Vertex);
 	geo->VertexBufferByteSize = vbByteSize;
 	geo->IndexFormat = DXGI_FORMAT_R16_UINT;
 	geo->IndexBufferByteSize = ibByteSize;
 
+	// Draw arguments
 	geo->DrawArgs["box"] = boxSubmesh;
 	geo->DrawArgs["Eagle"] = EagleSubmesh;
 	geo->DrawArgs["Raptor"] = RaptorSubmesh;
+	geo->DrawArgs["grid"] = gridSubmesh;
 
 	mGeometries[geo->Name] = std::move(geo);
 }
@@ -653,7 +674,6 @@ void Game::BuildFrameResources()
 //step13
 void Game::BuildMaterials()
 {
-
 	auto Eagle = std::make_unique<Material>();
 	Eagle->Name = "Eagle";
 	Eagle->MatCBIndex = 0;
@@ -684,6 +704,15 @@ void Game::BuildMaterials()
 
 	mMaterials["Desert"] = std::move(Desert);
 
+	auto Terrain = std::make_unique<Material>();
+	Terrain->Name = "Terrain";
+	Terrain->MatCBIndex = 3;
+	Terrain->DiffuseSrvHeapIndex = 3;
+	Terrain->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	Terrain->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	Terrain->Roughness = 0.2f;
+
+	mMaterials["Terrain"] = std::move(Terrain);
 }
 
 void Game::BuildRenderItems()
@@ -784,4 +813,23 @@ std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> Game::GetStaticSamplers()
 		pointWrap, pointClamp,
 		linearWrap, linearClamp,
 		anisotropicWrap, anisotropicClamp };
+}
+
+float Game::GetHillsHeight(float x, float z) const
+{
+	return 0.1f * (z * sinf(0.1f * x) + x * cosf(0.1f * z));
+}
+
+XMFLOAT3 Game::GetHillsNormal(float x, float z) const
+{
+	// n = (-df/dx, 1, -df/dz)
+	XMFLOAT3 n(
+		-0.03f * z * cosf(0.1f * x) - 0.3f * cosf(0.1f * z),
+		1.0f,
+		-0.3f * sinf(0.1f * x) + 0.03f * x * sinf(0.1f * z));
+
+	XMVECTOR unitNormal = XMVector3Normalize(XMLoadFloat3(&n));
+	XMStoreFloat3(&n, unitNormal);
+
+	return n;
 }

@@ -27,15 +27,15 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 	switch (mType)
 	{
 	case (Eagle):	// move eagle
-		if (mWorldPosition.x >= 3)
+		if (mWorldPosition.x >= 2.0)
 		{
-			mWorldPosition.x = 3;
+			mWorldPosition.x = 2.0;
 			setVelocity(-2.f, 0.f);
 		}
 
-		else if (mWorldPosition.x <= -3)
+		else if (mWorldPosition.x <= -2.0)
 		{
-			mWorldPosition.x = -3;
+			mWorldPosition.x = -2.0;
 			setVelocity(2.f, 0.f);
 		}
 		break;
