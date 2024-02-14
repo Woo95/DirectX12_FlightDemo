@@ -40,9 +40,19 @@ private:
 	* @brief Setting up the aircraft instance data
 	*/
 	virtual void		buildCurrent();
-
+	/**
+	* @brief drawing the aircraft
+	*/
+	virtual void		drawCurrent();
 
 private:
 	Type				mType;
 	std::string			mSprite;
+
+	Game* mGame;
+	ID3D12GraphicsCommandList* cmdList;
+
+	std::vector<std::unique_ptr<FrameResource>> mFrameResources;
+	FrameResource* mCurrFrameResource = nullptr;
+	int mCurrFrameResourceIndex = 0;
 };

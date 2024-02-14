@@ -44,6 +44,30 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 	Entity::updateCurrent(gt);
 }
 
+void Aircraft::drawCurrent()
+{
+	auto vbv = renderer->Geo->VertexBufferView();
+	auto ibv = renderer->Geo->IndexBufferView();
+
+	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
+	UINT matCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(MaterialConstants));
+
+	auto objectCB = mCurrFrameResource->ObjectCB->Resource();
+	auto matCB = mCurrFrameResource->MaterialCB->Resource();
+
+	cmdList->IASetVertexBuffers(0, 1, &vbv);
+	cmdList->IASetIndexBuffer(&ibv);
+	cmdList->IASetPrimitiveTopology(renderer->PrimitiveType);
+
+	D3D12_GPU_VIRTUAL_ADDRESS objCBAddress = objectCB->GetGPUVirtualAddress() + renderer->ObjCBIndex * objCBByteSize;
+	D3D12_GPU_VIRTUAL_ADDRESS matCBAddress = matCB->GetGPUVirtualAddress() + renderer->Mat->MatCBIndex * matCBByteSize;
+
+	cmdList->SetGraphicsRootConstantBufferView(1, objCBAddress);
+	cmdList->SetGraphicsRootConstantBufferView(3, matCBAddress);
+
+	cmdList->DrawIndexedInstanced(renderer->IndexCount, 1, renderer->StartIndexLocation, renderer->BaseVertexLocation, 0);
+}
+
 void Aircraft::buildCurrent()
 {
 	auto render = std::make_unique<RenderItem>();
