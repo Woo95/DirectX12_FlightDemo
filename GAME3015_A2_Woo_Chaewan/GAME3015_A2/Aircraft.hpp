@@ -41,6 +41,11 @@ private:
 	* @brief Setting up the aircraft instance data
 	*/
 	virtual void		buildCurrent();
+	/**
+	* @brief drawing the aircraft
+	*/
+	virtual void		drawCurrent() const;
+
 	virtual unsigned int	getCategory() const;
 	void checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands);
 

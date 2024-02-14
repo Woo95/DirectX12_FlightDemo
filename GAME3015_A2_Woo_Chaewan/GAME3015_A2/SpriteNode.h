@@ -19,7 +19,8 @@ public:
      */
     virtual ~SpriteNode();
 
-private:
+protected:
+    virtual void			updateCurrent(const GameTimer& gt);
     /**
      * @brief Draws the current SpriteNode
      */

@@ -70,6 +70,12 @@ protected:
     void LogAdapterOutputs(IDXGIAdapter* adapter);
     void LogOutputDisplayModes(IDXGIOutput* output, DXGI_FORMAT format);
 
+public:
+    Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> GetGraphicsCommandList()
+    {
+        return mCommandList;
+    }
+
 protected:
 
     static D3DApp* mApp;

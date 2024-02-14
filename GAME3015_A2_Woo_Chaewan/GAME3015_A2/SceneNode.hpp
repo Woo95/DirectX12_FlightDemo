@@ -139,7 +139,8 @@ public:
 	* @brief Move current instance by x,y,z
 	*/
 	void					move(float x, float y, float z);
-private:
+		
+protected:
 	/**
 	* @brief Update current SceneNode instance
 	* @param Utilize the GameTimer reference gt to access the deltaTime property for updating the aircraft instance
@@ -170,7 +171,7 @@ private:
 
 protected:
 	Game* game;
-	RenderItem* renderer;
+	std::unique_ptr<RenderItem> renderer;
 
 protected:
 	XMFLOAT3				mWorldPosition;

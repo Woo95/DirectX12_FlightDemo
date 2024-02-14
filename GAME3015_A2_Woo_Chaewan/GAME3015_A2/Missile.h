@@ -26,6 +26,8 @@ private:
 	*/
 	virtual void		buildCurrent();
 
+	virtual void		drawCurrent() const;
+
 
 private:
 	/**

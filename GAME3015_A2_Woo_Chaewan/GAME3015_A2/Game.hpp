@@ -152,11 +152,38 @@ private:
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
+public:
+	FrameResource* GetCurrentFrameResource()
+	{
+		return mCurrFrameResource;
+	}
+
+	ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap()
+	{
+		return mSrvDescriptorHeap;
+	}
+
+	UINT GetDescriptorHeapSize()
+	{
+		return mCbvSrvDescriptorSize;
+	}
+
+	void AddCurrentRenderCount()
+	{
+		++mCurrentRenderCount;
+	}
+
+	int GetCurrentRenderCount()
+	{
+		return mCurrentRenderCount;
+	}
+
 private:
 
 	std::vector<std::unique_ptr<FrameResource>> mFrameResources;
 	FrameResource* mCurrFrameResource = nullptr;
 	int mCurrFrameResourceIndex = 0;
+	int	mCurrentRenderCount = 0;
 
 	UINT mCbvSrvDescriptorSize = 0;
 
