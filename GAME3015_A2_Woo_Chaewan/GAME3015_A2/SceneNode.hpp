@@ -179,5 +179,17 @@ protected:
 	XMFLOAT3				mWorldScaling;
 	std::vector<Ptr>		mChildren;
 	SceneNode* mParent;
+	bool		mActive;
+
+public:
+	bool GetActive()
+	{
+		return mActive;
+	}
+
+	void SetActive(bool Active)
+	{
+		mActive = Active;
+	}
 };
 

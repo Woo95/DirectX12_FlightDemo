@@ -38,13 +38,13 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 			mWorldPosition.x = -2.9f;
 		}
 
-		if (mWorldPosition.z <= -0.1f)
+		if (mWorldPosition.z <= -1.5f)
 		{
-			mWorldPosition.z = -0.1f;
+			mWorldPosition.z = -1.5f;
 		}
-		else if (mWorldPosition.z >= 4.2f)
+		else if (mWorldPosition.z >= 2.5f)
 		{
-			mWorldPosition.z = 4.2f;
+			mWorldPosition.z = 2.5f;
 		}
 		break;
 	}
@@ -136,6 +136,7 @@ void Aircraft::checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands
 
 void Aircraft::launchMissile()
 {
+	// STL vector에 문제가 발생하고 있어서, postCommand를 통해서 해결했다.
 	game->GetWorld()->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
 }
 
@@ -148,7 +149,8 @@ void Aircraft::CreateMissile()
 	//MissileInstance->setPosition(0.0, 0.0, 1.0);
 	MissileInstance->setScale(0.5, 1.0, 0.5);
 	MissileInstance->setWorldRotation(0.0, 0.0, 0.0);
-	MissileInstance->setVelocity(0.f, 3.f);
+	//MissileInstance->setVelocity(0.f, 3.f);
+	MissileInstance->setSaveVelocity(0.f, 3.f);
 	MissileInstance->build();
 	//attachChild(std::move(MissileInstance));
 	game->GetWorld()->GetSceneGraph()->attachChild(std::move(MissileInstance));

@@ -46,11 +46,27 @@ private:
 	*/
 	virtual void		drawCurrent() const;
 
-	virtual unsigned int	getCategory() const;
-	void checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands);
+    /**
+     * @brief Get the category of the aircraft
+     * @return The category of the aircraft.
+     */
+    virtual unsigned int getCategory() const;
+
+    /**
+     * @brief Check if a projectile launch is needed
+     * @param gt A reference to the GameTimer object to access the deltaTime property.
+     * @param commands The command queue to add commands if a projectile launch is needed.
+     */
+    void checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands);
 
 public:
+	/**
+	 * @brief Launch a missile from the aircraft.
+	 */
 	void launchMissile();
+	/**
+	  * @brief Create a missile.
+	  */
 	void CreateMissile();
 
 

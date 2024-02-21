@@ -3,7 +3,7 @@
 
 Missile::Missile(Game* game)	:
 	Entity(game),
-	Distance(3.f)
+	m_Distance(10.f)
 {
 }
 
@@ -13,21 +13,26 @@ Missile::~Missile()
 
 void Missile::updateCurrent(const GameTimer& gt)
 {
-	mSaveVelocity = mVelocity;
-
-	Entity::updateCurrent(gt);
-
 	mVelocity = mSaveVelocity;
 
-	XMFLOAT2 mV;
-	mV.x = mVelocity.x * gt.DeltaTime();
-	mV.y = mVelocity.y * gt.DeltaTime();
-	
-	float	Dist = XMVectorGetX(XMVector2Length(XMLoadFloat2(&mV)));
-
-	Distance -= Dist;
+	XMFLOAT3	SavePos = mWorldPosition;
 
 	Entity::updateCurrent(gt);
+
+	XMFLOAT3	Dir;
+
+	Dir.x = mWorldPosition.x - SavePos.x;
+	Dir.y = mWorldPosition.y - SavePos.y;
+	Dir.z = mWorldPosition.z - SavePos.z;
+
+	float	Dist = XMVectorGetX(XMVector3Length(XMLoadFloat3(&Dir)));
+
+	m_Distance -= Dist;
+
+	if (m_Distance <= 0.f)
+	{
+		SetActive(false);
+	}
 
 
 	auto currObjectCB = game->GetCurrentFrameResource()->ObjectCB.get();

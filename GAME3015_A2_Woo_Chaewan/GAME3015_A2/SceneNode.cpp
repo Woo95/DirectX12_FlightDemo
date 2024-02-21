@@ -5,6 +5,7 @@ SceneNode::SceneNode(Game* game)
 	: mChildren()
 	, mParent(nullptr)
 	, game(game)
+	, mActive(true)
 {
 	mWorldPosition = XMFLOAT3(0, 0, 0);
 	mWorldScaling = XMFLOAT3(1, 1, 1);
@@ -49,9 +50,16 @@ void SceneNode::updateCurrent(const GameTimer& gt)
 
 void SceneNode::updateChildren(const GameTimer& gt)
 {
-	for (Ptr& child : mChildren)
+	for (auto iter = mChildren.begin(); iter != mChildren.end();)
 	{
-		child->update(gt);
+		if (!(*iter)->GetActive())
+		{
+			iter = mChildren.erase(iter);
+			continue;
+		}
+
+		(*iter)->update(gt);
+		++iter;
 	}
 }
 

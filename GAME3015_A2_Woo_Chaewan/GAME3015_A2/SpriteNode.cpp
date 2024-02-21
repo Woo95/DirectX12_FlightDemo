@@ -11,6 +11,8 @@ SpriteNode::~SpriteNode()
 
 void SpriteNode::updateCurrent(const GameTimer& gt)
 {
+	Entity::updateCurrent(gt);
+
 	auto currObjectCB = game->GetCurrentFrameResource()->ObjectCB.get();
 
 	// Do nothing by default

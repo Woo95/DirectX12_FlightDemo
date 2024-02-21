@@ -25,7 +25,9 @@ private:
 	* @brief Setting up the Missile instance data
 	*/
 	virtual void		buildCurrent();
-
+	/**
+	* @brief Drawing the Missile
+	*/
 	virtual void		drawCurrent() const;
 
 
@@ -33,7 +35,14 @@ private:
 	/**
 	* @brief Destructor for the Missile class
 	*/
-	float		Distance;
+	float			m_Distance;
 	XMFLOAT2		mSaveVelocity;
+
+public:
+	void setSaveVelocity(float x, float y)
+	{
+		mSaveVelocity.x = x;
+		mSaveVelocity.y = y;
+	}
 };
 

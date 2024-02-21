@@ -34,8 +34,15 @@ public:
 	* @brief Builds the initial scene for the game
 	*/
 	void								buildScene();
+	/**
+	  * @brief Get the command queue of the world.
+	  * @return A reference to the CommandQueue.
+	  */
 	CommandQueue& getCommandQueue();
-
+	/**
+	 * @brief Get the root node of the scene graph.
+	 * @return A pointer to the root node of the scene graph.
+	 */
 	SceneNode* GetSceneGraph()
 	{
 		return mSceneGraph;
@@ -51,6 +58,12 @@ private:
 	};
 
 public:
+	/**
+	 * @brief Add a command to be executed after the current frame.
+	 * @tparam T The type of object.
+	 * @param Obj The object pointer.
+	 * @param Func The member function pointer to be executed.
+	 */
 	template <typename T>
 	void AddPostCommandQueue(T* Obj, void(T::* Func)())
 	{
