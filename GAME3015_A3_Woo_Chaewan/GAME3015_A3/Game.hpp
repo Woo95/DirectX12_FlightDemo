@@ -3,6 +3,7 @@
 #include "Common/Camera.h"
 #include "World.hpp"
 #include "Player.h"
+#include "StateStack.h"
 
 /**
  * @brief Game class that represents the main application
@@ -152,6 +153,8 @@ private:
 
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
+	void registerStates();
+
 public:
 	FrameResource* GetCurrentFrameResource()
 	{
@@ -222,14 +225,15 @@ private:
 
 	POINT mLastMousePos;
 	Camera mCamera;
-	World mWorld;
+	//World mWorld;
+	StateStack				mStateStack;
 	Player					mPlayer;
 
 public:
-	World* GetWorld()
+	/*World* GetWorld()
 	{
 		return &mWorld;
-	}
+	}*/
 
 public:
 	std::vector<std::unique_ptr<RenderItem>>& getRenderItems() { return mAllRitems; }

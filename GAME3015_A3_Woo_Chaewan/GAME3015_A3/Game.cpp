@@ -1,11 +1,14 @@
 #include "Game.hpp"
+#include "State.h"
 
 const int gNumFrameResources = 3;
 
 Game::Game(HINSTANCE hInstance)
 	: D3DApp(hInstance)
-	, mWorld(this)
+	, mStateStack(State::Context(this, &mPlayer))
 {
+	registerStates();
+	mStateStack.pushState(States::Title);
 }
 
 Game::~Game()
@@ -72,7 +75,8 @@ void Game::Update(const GameTimer& gt)
 	mCurrFrameResource = mFrameResources[mCurrFrameResourceIndex].get();
 
 
-	mWorld.update(gt);
+	mStateStack.update(gt);
+	//mWorld.update(gt);
 	//UpdateCamera(gt);
 
 	// Has the GPU finished processing the commands of the current frame resource?
@@ -866,4 +870,16 @@ XMFLOAT3 Game::GetHillsNormal(float x, float z) const
 	XMStoreFloat3(&n, unitNormal);
 
 	return n;
+}
+
+void Game::registerStates()
+{
+	//mStateStack.registerState<TitleState>(States::Title);
+	//mStateStack.registerState<MenuState>(States::Menu);
+	//mStateStack.registerState<GameState>(States::Game);
+	//mStateStack.registerState<PauseState>(States::Pause);
+	//mStateStack.registerState<SettingsState>(States::Settings);
+#pragma region step 4
+	//mStateStack.registerState<GameOverState>(States::GameOver);
+#pragma endregion
 }
