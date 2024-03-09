@@ -1,5 +1,8 @@
 #include "Game.hpp"
-#include "State.h"
+#include "TitleState.h"
+#include "PauseState.h"
+#include "MainMenuState.h"
+#include "GameState.h"
 
 const int gNumFrameResources = 3;
 
@@ -8,7 +11,7 @@ Game::Game(HINSTANCE hInstance)
 	, mStateStack(State::Context(this, &mPlayer))
 {
 	registerStates();
-	mStateStack.pushState(States::Title);
+	mStateStack.pushState(States::Game);
 }
 
 Game::~Game()
@@ -136,7 +139,8 @@ void Game::Draw(const GameTimer& gt)
 	auto passCB = mCurrFrameResource->PassCB->Resource();
 	mCommandList->SetGraphicsRootConstantBufferView(2, passCB->GetGPUVirtualAddress());
 
-	mWorld.draw();
+	mStateStack.draw();
+	//mWorld.draw();
 	//DrawRenderItems(mCommandList.Get(), mOpaqueRitems);
 
 	// Indicate a state transition on the resource usage.
@@ -874,10 +878,10 @@ XMFLOAT3 Game::GetHillsNormal(float x, float z) const
 
 void Game::registerStates()
 {
-	//mStateStack.registerState<TitleState>(States::Title);
-	//mStateStack.registerState<MenuState>(States::Menu);
-	//mStateStack.registerState<GameState>(States::Game);
-	//mStateStack.registerState<PauseState>(States::Pause);
+	mStateStack.registerState<TitleState>(States::Title);
+	mStateStack.registerState<MainMenuState>(States::Menu);
+	mStateStack.registerState<GameState>(States::Game);
+	mStateStack.registerState<PauseState>(States::Pause);
 	//mStateStack.registerState<SettingsState>(States::Settings);
 #pragma region step 4
 	//mStateStack.registerState<GameOverState>(States::GameOver);

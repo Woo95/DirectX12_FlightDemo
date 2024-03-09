@@ -1,7 +1,7 @@
 #include "SpriteNode.h"
 #include "Game.hpp"
 
-SpriteNode::SpriteNode(Game* game) : Entity(game)
+SpriteNode::SpriteNode(Game* game, World* world) : Entity(game, world)
 {
 }
 

@@ -3,7 +3,7 @@
 #include "Missile.h"
 #include "World.hpp"
 
-Aircraft::Aircraft(Type type, Game* game) : Entity(game)
+Aircraft::Aircraft(Type type, Game* game, World* world) : Entity(game, world)
 	, mType(type)
 {
 	switch (type)
@@ -53,7 +53,7 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 
 	Entity::updateCurrent(gt);
 
-	auto currObjectCB = game->GetCurrentFrameResource()->ObjectCB.get();
+	auto currObjectCB = mGame->GetCurrentFrameResource()->ObjectCB.get();
 
 	// Do nothing by default
 	XMMATRIX world = XMLoadFloat4x4(&renderer->World);
@@ -63,25 +63,25 @@ void Aircraft::updateCurrent(const GameTimer& gt)
 	XMStoreFloat4x4(&objConstants.World, XMMatrixTranspose(world));
 	XMStoreFloat4x4(&objConstants.TexTransform, XMMatrixTranspose(texTransform));
 
-	renderer->ObjCBIndex = game->GetCurrentRenderCount();
+	renderer->ObjCBIndex = mGame->GetCurrentRenderCount();
 
 	currObjectCB->CopyData(renderer->ObjCBIndex, objConstants);
-	game->AddCurrentRenderCount();
+	mGame->AddCurrentRenderCount();
 }
 
 void Aircraft::buildCurrent()
 {
 	renderer = std::make_unique<RenderItem>();
 	renderer->World = getTransform();
-	//renderer->ObjCBIndex = game->getRenderItems().size();
-	renderer->Mat = game->getMaterials()[mSprite].get();
-	renderer->Geo = game->getGeometries()["ShapeGeo"].get();
+	//renderer->ObjCBIndex = mGame->getRenderItems().size();
+	renderer->Mat = mGame->getMaterials()[mSprite].get();
+	renderer->Geo = mGame->getGeometries()["ShapeGeo"].get();
 	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	renderer->IndexCount = renderer->Geo->DrawArgs[mSprite].IndexCount;
 	renderer->StartIndexLocation = renderer->Geo->DrawArgs[mSprite].StartIndexLocation;
 	renderer->BaseVertexLocation = renderer->Geo->DrawArgs[mSprite].BaseVertexLocation;
 
-	//game->getRenderItems().push_back(std::move(render));
+	//mGame->getRenderItems().push_back(std::move(render));
 }
 
 void Aircraft::drawCurrent() const
@@ -89,19 +89,19 @@ void Aircraft::drawCurrent() const
 	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
 	UINT matCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(MaterialConstants));
 
-	FrameResource* CurrentFrame = game->GetCurrentFrameResource();
+	FrameResource* CurrentFrame = mGame->GetCurrentFrameResource();
 
 	auto objectCB = CurrentFrame->ObjectCB->Resource();
 	auto matCB = CurrentFrame->MaterialCB->Resource();
 
-	ID3D12GraphicsCommandList* cmdList = game->GetGraphicsCommandList().Get();
+	ID3D12GraphicsCommandList* cmdList = mGame->GetGraphicsCommandList().Get();
 
 	cmdList->IASetVertexBuffers(0, 1, &renderer->Geo->VertexBufferView());
 	cmdList->IASetIndexBuffer(&renderer->Geo->IndexBufferView());
 	cmdList->IASetPrimitiveTopology(renderer->PrimitiveType);
 
-	ComPtr<ID3D12DescriptorHeap>	SrvDescriptorHeap = game->GetDescriptorHeap();
-	UINT	CbvSrvDescriptorSize = game->GetDescriptorHeapSize();
+	ComPtr<ID3D12DescriptorHeap>	SrvDescriptorHeap = mGame->GetDescriptorHeap();
+	UINT	CbvSrvDescriptorSize = mGame->GetDescriptorHeapSize();
 
 	//step18
 	CD3DX12_GPU_DESCRIPTOR_HANDLE tex(SrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());
@@ -137,12 +137,12 @@ void Aircraft::checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands
 void Aircraft::launchMissile()
 {
 	// STL vector에 문제가 발생하고 있어서, postCommand를 통해서 해결했다.
-	game->GetWorld()->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
+	mWorld->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
 }
 
 void Aircraft::CreateMissile()
 {
-	std::unique_ptr<Missile> MissileInstance(new Missile(game));
+	std::unique_ptr<Missile> MissileInstance(new Missile(mGame, mWorld));
 	XMFLOAT3	Pos = mWorldPosition;
 	Pos.z += 1.f;
 	MissileInstance->setPosition(Pos.x, Pos.y, Pos.z + 1.0);
@@ -153,5 +153,5 @@ void Aircraft::CreateMissile()
 	MissileInstance->setSaveVelocity(0.f, 3.f);
 	MissileInstance->build();
 	//attachChild(std::move(MissileInstance));
-	game->GetWorld()->GetSceneGraph()->attachChild(std::move(MissileInstance));
+	mWorld->GetSceneGraph()->attachChild(std::move(MissileInstance));
 }

@@ -12,7 +12,7 @@ public:
      * @brief Constructor for the SpriteNode class
      * @param game Pointer to the Game instance
      */
-    SpriteNode(Game* game);
+    SpriteNode(Game* game, World* world);
 
     /**
      * @brief Destructor for the SpriteNode class

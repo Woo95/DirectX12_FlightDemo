@@ -1,7 +1,22 @@
 #pragma once
+
 #include "State.h"
+#include "World.hpp"
+
 class GameState :
     public State
 {
+public:
+	GameState(StateStack& stack, Context context);
+
+	virtual void		draw();
+	virtual bool		update(const GameTimer& gt);
+	virtual	bool		InputEvent();
+	virtual	bool		handleEvent(CommandQueue& commands);
+	virtual	bool		handleRealtimeEvent(CommandQueue& commands);
+
+private:
+	World mWorld;
+	class Player* mPlayer;
 };
 

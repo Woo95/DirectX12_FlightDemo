@@ -11,7 +11,7 @@ public:
 	/**
 	* @brief Constructor for the Entity class
 	*/
-	Entity(Game* game);
+	Entity(Game* game, World* world);
 	/**
 	* @brief Destructor for the Entity class
 	*/

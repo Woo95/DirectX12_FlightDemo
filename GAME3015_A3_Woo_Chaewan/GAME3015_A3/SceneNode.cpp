@@ -1,10 +1,11 @@
 #include "SceneNode.hpp"
 #include "Game.hpp"
 
-SceneNode::SceneNode(Game* game)
+SceneNode::SceneNode(Game* game, World* world)
 	: mChildren()
 	, mParent(nullptr)
-	, game(game)
+	, mWorld(world)
+	, mGame(game)
 	, mActive(true)
 {
 	mWorldPosition = XMFLOAT3(0, 0, 0);

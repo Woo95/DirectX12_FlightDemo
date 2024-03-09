@@ -1,8 +1,8 @@
 #include "Missile.h"
 #include "Game.hpp"
 
-Missile::Missile(Game* game)	:
-	Entity(game),
+Missile::Missile(Game* game, World* world)	:
+	Entity(game, world),
 	m_Distance(10.f)
 {
 }
@@ -35,7 +35,7 @@ void Missile::updateCurrent(const GameTimer& gt)
 	}
 
 
-	auto currObjectCB = game->GetCurrentFrameResource()->ObjectCB.get();
+	auto currObjectCB = mGame->GetCurrentFrameResource()->ObjectCB.get();
 
 	XMMATRIX world = XMLoadFloat4x4(&renderer->World);
 	XMMATRIX texTransform = XMLoadFloat4x4(&renderer->TexTransform);
@@ -44,19 +44,19 @@ void Missile::updateCurrent(const GameTimer& gt)
 	XMStoreFloat4x4(&objConstants.World, XMMatrixTranspose(world));
 	XMStoreFloat4x4(&objConstants.TexTransform, XMMatrixTranspose(texTransform));
 
-	renderer->ObjCBIndex = game->GetCurrentRenderCount();
+	renderer->ObjCBIndex = mGame->GetCurrentRenderCount();
 
 	currObjectCB->CopyData(renderer->ObjCBIndex, objConstants);
-	game->AddCurrentRenderCount();
+	mGame->AddCurrentRenderCount();
 }
 
 void Missile::buildCurrent()
 {
 	renderer = std::make_unique<RenderItem>();
 	renderer->World = getTransform();
-	renderer->ObjCBIndex = game->getRenderItems().size();
-	renderer->Mat = game->getMaterials()["Missile"].get();
-	renderer->Geo = game->getGeometries()["ShapeGeo"].get();
+	renderer->ObjCBIndex = mGame->getRenderItems().size();
+	renderer->Mat = mGame->getMaterials()["Missile"].get();
+	renderer->Geo = mGame->getGeometries()["ShapeGeo"].get();
 	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	renderer->IndexCount = renderer->Geo->DrawArgs["box"].IndexCount;
 	renderer->StartIndexLocation = renderer->Geo->DrawArgs["box"].StartIndexLocation;
@@ -71,19 +71,19 @@ void Missile::drawCurrent() const
 	UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
 	UINT matCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(MaterialConstants));
 
-	FrameResource* CurrentFrame = game->GetCurrentFrameResource();
+	FrameResource* CurrentFrame = mGame->GetCurrentFrameResource();
 
 	auto objectCB = CurrentFrame->ObjectCB->Resource();
 	auto matCB = CurrentFrame->MaterialCB->Resource();
 
-	ID3D12GraphicsCommandList* cmdList = game->GetGraphicsCommandList().Get();
+	ID3D12GraphicsCommandList* cmdList = mGame->GetGraphicsCommandList().Get();
 
 	cmdList->IASetVertexBuffers(0, 1, &renderer->Geo->VertexBufferView());
 	cmdList->IASetIndexBuffer(&renderer->Geo->IndexBufferView());
 	cmdList->IASetPrimitiveTopology(renderer->PrimitiveType);
 
-	ComPtr<ID3D12DescriptorHeap>	SrvDescriptorHeap = game->GetDescriptorHeap();
-	UINT	CbvSrvDescriptorSize = game->GetDescriptorHeapSize();
+	ComPtr<ID3D12DescriptorHeap>	SrvDescriptorHeap = mGame->GetDescriptorHeap();
+	UINT	CbvSrvDescriptorSize = mGame->GetDescriptorHeapSize();
 
 	//step18
 	CD3DX12_GPU_DESCRIPTOR_HANDLE tex(SrvDescriptorHeap->GetGPUDescriptorHandleForHeapStart());

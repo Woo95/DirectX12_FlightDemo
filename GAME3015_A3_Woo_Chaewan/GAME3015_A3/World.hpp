@@ -5,6 +5,7 @@
 #include "CommandQueue.h"
 #include <queue>
 
+class Game;
 /**
  * @brief World class that handles update, draw, and building the game world
  */

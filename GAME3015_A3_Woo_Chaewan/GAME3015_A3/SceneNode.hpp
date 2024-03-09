@@ -50,6 +50,7 @@ struct RenderItem
 };
 
 class Game;
+class World;
 
 // 씬그래프의 트리 구조를 구성하기 위한 노드 클래스이다.
 // 이 클래스를 상속받아 출력하기 위한 클래스들을 만들어주는 용도로 사용한다.
@@ -67,7 +68,7 @@ public:
 	* @brief Constructor for the SceneNode class
 	* @param game ptr to the Game instance
 	*/
-	SceneNode(Game* game);
+	SceneNode(Game* game, World* world);
 	/**
 	* @brief Destructor for the SceneNode class
 	*/
@@ -170,7 +171,8 @@ protected:
 	void					buildChildren();
 
 protected:
-	Game* game;
+	World* mWorld;
+	Game*	mGame;
 	std::unique_ptr<RenderItem> renderer;
 
 protected:
