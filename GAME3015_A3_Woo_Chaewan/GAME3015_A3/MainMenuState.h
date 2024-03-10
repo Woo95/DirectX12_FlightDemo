@@ -14,6 +14,6 @@ public:
 
 
 private:
-	GUI::Container			mGUIContainer;
+	//GUI::Container			mGUIContainer;
 };
 

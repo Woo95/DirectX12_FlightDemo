@@ -11,7 +11,7 @@ Game::Game(HINSTANCE hInstance)
 	, mStateStack(State::Context(this, &mPlayer))
 {
 	registerStates();
-	mStateStack.pushState(States::Game);
+	mStateStack.pushState(States::Title);
 }
 
 Game::~Game()
@@ -199,13 +199,13 @@ void Game::OnKeyboardInput(const GameTimer& gt)
 {
 	mCamera.UpdateViewMatrix();
 
-	CommandQueue& commands = mWorld.getCommandQueue();
+	//CommandQueue& commands = mWorld.getCommandQueue();
 	
 	mPlayer.InputEvent();
 
-	mPlayer.handleEvent(commands);
+	//mPlayer.handleEvent(commands);
 
-	mPlayer.handleRealtimeEvent(commands);
+	//mPlayer.handleRealtimeEvent(commands);
 
 	// Camera Control //
 
@@ -756,7 +756,7 @@ void Game::BuildMaterials()
 
 void Game::BuildRenderItems()
 {
-	mWorld.buildScene();
+	//mWorld.buildScene();
 
 	// All the render items are opaque.
 	for (auto& e : mAllRitems)

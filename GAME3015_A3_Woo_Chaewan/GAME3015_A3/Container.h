@@ -5,7 +5,7 @@
 namespace GUI
 {
 
-	class Container :
+	/*class Container :
         public Component
 	{
     public:
@@ -33,6 +33,6 @@ namespace GUI
     private:
         std::vector<Component::Ptr>		mChildren;
         int								mSelectedChild;
-	};
+	};*/
 
 }

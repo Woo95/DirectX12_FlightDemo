@@ -5,6 +5,7 @@ GameState::GameState(StateStack& stack, Context context)
 	mWorld(context.game),
 	mPlayer(context.player)
 {
+	mWorld.buildScene();
 }
 
 void GameState::draw()
@@ -26,8 +27,8 @@ bool GameState::InputEvent()
 
 bool GameState::handleEvent(CommandQueue& commands)
 {
-	requestStackPop();
-	requestStackPush(States::Menu);
+	//requestStackPop();
+	//requestStackPush(States::Menu);
 
 	return true;
 }

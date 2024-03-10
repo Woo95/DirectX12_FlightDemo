@@ -10,14 +10,14 @@ StateStack::StateStack(State::Context context)
 
 void StateStack::update(const GameTimer& gt)
 {
+	applyPendingChanges();
+
 	// Iterate from top to bottom, stop as soon as update() returns false
 	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
 	{
 		if (!(*itr)->update(gt))
 			break;
 	}
-
-	applyPendingChanges();
 }
 
 void StateStack::draw()
