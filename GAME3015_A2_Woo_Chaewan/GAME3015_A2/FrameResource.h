@@ -10,6 +10,11 @@ struct ObjectConstants
     DirectX::XMFLOAT4X4 TexTransform = MathHelper::Identity4x4();
 };
 
+/**
+ * @brief Structure representing constant data to pass to shaders.
+ *
+ * This structure contains various matrices, vectors, and other data required for rendering.
+ */
 struct PassConstants
 {
     DirectX::XMFLOAT4X4 View = MathHelper::Identity4x4();
@@ -36,6 +41,11 @@ struct PassConstants
     Light Lights[MaxLights];
 };
 
+/**
+ * @brief Structure representing a vertex with position, normal, and texture coordinates.
+ *
+ * This structure defines the attributes of a vertex used in rendering.
+ */
 struct Vertex
 {
     DirectX::XMFLOAT3 Pos;

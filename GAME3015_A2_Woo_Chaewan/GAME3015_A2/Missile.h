@@ -1,6 +1,9 @@
 #pragma once
 #include "Entity.hpp"
 
+/**
+ * @brief Missile class that inherit from Entity. For the Jet Missile.
+ */
 class Missile :
     public Entity
 {

@@ -6,7 +6,11 @@
 #include <map>
 
 class CommandQueue;
-
+/**
+ * @brief Class representing the player in the game.
+ *
+ * This class manages player input, actions, and key bindings.
+ */
 class Player
 {
 public:
@@ -27,6 +31,9 @@ public:
 		ActionCount
 	};
 
+	/**
+	 * @brief Structure representing data for an action.
+	 */
 	struct ActionData
 	{
 		Action	action;

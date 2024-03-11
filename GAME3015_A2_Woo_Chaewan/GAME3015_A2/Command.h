@@ -7,7 +7,11 @@
 
 
 class SceneNode;
-
+/**
+ * @brief Structure representing a command to be executed on a scene node.
+ *
+ * This structure encapsulates an action to be performed on a scene node, along with its category.
+ */
 struct Command
 {
 	typedef std::function<void(SceneNode&, const GameTimer& gt)> Action;

@@ -3,6 +3,11 @@
 #include "CommandQueue.h"
 #include <algorithm>
 
+/**
+ * @brief Structure for handling aircraft movement.
+ *
+ * This structure contains data and methods for moving an aircraft.
+ */
 struct AircraftMover
 {
 	AircraftMover(float vx, float vy)
