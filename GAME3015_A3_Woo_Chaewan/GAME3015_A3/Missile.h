@@ -8,7 +8,7 @@ public:
 	/**
 	* @brief Constructor for the Missile class
 	*/
-	Missile(Game* game, World* world);
+	Missile(Game* game, State* state);
 	/**
 	* @brief Destructor for the Missile class
 	*/

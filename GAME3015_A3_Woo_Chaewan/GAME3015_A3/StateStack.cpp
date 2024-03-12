@@ -96,7 +96,13 @@ void StateStack::applyPendingChanges()
 		switch (change.action)
 		{
 		case Push:
+		{
+			/*State::Ptr ptr = createState(change.stateID);
+			ptr->init();
+			mStack.push_back(ptr);*/
 			mStack.push_back(createState(change.stateID));
+			mStack.back()->init();
+		}
 			break;
 
 		case Pop:

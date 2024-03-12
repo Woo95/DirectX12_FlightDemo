@@ -11,7 +11,7 @@ Game::Game(HINSTANCE hInstance)
 	, mStateStack(State::Context(this, &mPlayer))
 {
 	registerStates();
-	mStateStack.pushState(States::Title);
+	mStateStack.pushState(States::Game);
 }
 
 Game::~Game()
@@ -424,6 +424,16 @@ void Game::LoadTextures()
 		MissileTex->Resource, MissileTex->UploadHeap));
 
 	mTextures[MissileTex->Name] = std::move(MissileTex);
+
+	//Missile
+	auto TitleTex = std::make_unique<Texture>();
+	TitleTex->Name = "TitleTex";
+	TitleTex->Filename = L"Textures/StartScreen1.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), TitleTex->Filename.c_str(),
+		TitleTex->Resource, TitleTex->UploadHeap));
+
+	mTextures[TitleTex->Name] = std::move(TitleTex);
 }
 
 void Game::BuildRootSignature()
@@ -751,6 +761,16 @@ void Game::BuildMaterials()
 	Missile->Roughness = 0.2f;
 
 	mMaterials["Missile"] = std::move(Missile);
+
+	auto Title = std::make_unique<Material>();
+	Title->Name = "Title";
+	Title->MatCBIndex = 4;
+	Title->DiffuseSrvHeapIndex = 4;
+	Title->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	Title->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	Title->Roughness = 0.2f;
+
+	mMaterials["Title"] = std::move(Title);
 
 }
 

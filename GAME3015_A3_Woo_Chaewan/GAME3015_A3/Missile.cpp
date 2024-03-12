@@ -1,8 +1,8 @@
 #include "Missile.h"
 #include "Game.hpp"
 
-Missile::Missile(Game* game, World* world)	:
-	Entity(game, world),
+Missile::Missile(Game* game, State* state)	:
+	Entity(game, state),
 	m_Distance(10.f)
 {
 }

@@ -24,7 +24,7 @@ public:
 	/**
 	* @brief Constructor for the Aircraft class
 	*/
-	Aircraft(Type type, Game* game, World* world);
+	Aircraft(Type type, Game* game, State* state);
 	/**
 	* @brief Destructor for the Aircraft class
 	*/

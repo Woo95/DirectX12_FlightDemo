@@ -1,10 +1,10 @@
 #include "SceneNode.hpp"
 #include "Game.hpp"
 
-SceneNode::SceneNode(Game* game, World* world)
+SceneNode::SceneNode(Game* game, State* state)
 	: mChildren()
 	, mParent(nullptr)
-	, mWorld(world)
+	, mState(state)
 	, mGame(game)
 	, mActive(true)
 {

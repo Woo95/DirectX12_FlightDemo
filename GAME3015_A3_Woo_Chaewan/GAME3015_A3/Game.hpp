@@ -1,9 +1,14 @@
 
 #include "Common/d3dApp.h"
 #include "Common/Camera.h"
-#include "World.hpp"
+#include "Common/d3dUtil.h"
+#include "Common/MathHelper.h"
 #include "Player.h"
 #include "StateStack.h"
+#include "FrameResource.h"
+#include "SceneNode.hpp"
+
+using namespace DirectX;
 
 /**
  * @brief Game class that represents the main application

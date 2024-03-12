@@ -12,12 +12,16 @@ public:
      * @brief Constructor for the SpriteNode class
      * @param game Pointer to the Game instance
      */
-    SpriteNode(Game* game, World* world);
+    SpriteNode(Game* game, State* state, const std::string& SpriteName, const std::string& ShapeName);
 
     /**
      * @brief Destructor for the SpriteNode class
      */
     virtual ~SpriteNode();
+
+protected:
+    std::string		mSpriteName;
+    std::string		mShapeName;
 
 protected:
     virtual void			updateCurrent(const GameTimer& gt);

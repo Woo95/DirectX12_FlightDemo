@@ -1,7 +1,10 @@
 #include "SpriteNode.h"
 #include "Game.hpp"
 
-SpriteNode::SpriteNode(Game* game, World* world) : Entity(game, world)
+SpriteNode::SpriteNode(Game* game, State* state, const std::string& SpriteName, const std::string& ShapeName) :
+	Entity(game, state)
+	, mSpriteName(SpriteName)
+	, mShapeName(ShapeName)
 {
 }
 
@@ -73,12 +76,12 @@ void SpriteNode::buildCurrent()
 	renderer->World = getTransform();
 	//XMStoreFloat4x4(&renderer->TexTransform, XMMatrixScaling(1.0f, mWorldScaling.z / 10.f, 1.0f));	// worldScale / 10.0f amount of desert texture
 	renderer->ObjCBIndex = mGame->getRenderItems().size();
-	renderer->Mat = mGame->getMaterials()["Desert"].get();
+	renderer->Mat = mGame->getMaterials()[mSpriteName].get();
 	renderer->Geo = mGame->getGeometries()["ShapeGeo"].get();
 	renderer->PrimitiveType = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-	renderer->IndexCount = renderer->Geo->DrawArgs["grid"].IndexCount;
-	renderer->StartIndexLocation = renderer->Geo->DrawArgs["grid"].StartIndexLocation;
-	renderer->BaseVertexLocation = renderer->Geo->DrawArgs["grid"].BaseVertexLocation;
+	renderer->IndexCount = renderer->Geo->DrawArgs[mShapeName].IndexCount;
+	renderer->StartIndexLocation = renderer->Geo->DrawArgs[mShapeName].StartIndexLocation;
+	renderer->BaseVertexLocation = renderer->Geo->DrawArgs[mShapeName].BaseVertexLocation;
 
 	//game->getRenderItems().push_back(std::move(render));
 }

@@ -1,9 +1,8 @@
 #include "Aircraft.hpp"
 #include "Game.hpp"
 #include "Missile.h"
-#include "World.hpp"
 
-Aircraft::Aircraft(Type type, Game* game, World* world) : Entity(game, world)
+Aircraft::Aircraft(Type type, Game* game, State* state) : Entity(game, state)
 	, mType(type)
 {
 	switch (type)
@@ -137,12 +136,12 @@ void Aircraft::checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands
 void Aircraft::launchMissile()
 {
 	// STL vector에 문제가 발생하고 있어서, postCommand를 통해서 해결했다.
-	mWorld->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
+	mState->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
 }
 
 void Aircraft::CreateMissile()
 {
-	std::unique_ptr<Missile> MissileInstance(new Missile(mGame, mWorld));
+	std::unique_ptr<Missile> MissileInstance(new Missile(mGame, mState));
 	XMFLOAT3	Pos = mWorldPosition;
 	Pos.z += 1.f;
 	MissileInstance->setPosition(Pos.x, Pos.y, Pos.z + 1.0);
@@ -153,5 +152,5 @@ void Aircraft::CreateMissile()
 	MissileInstance->setSaveVelocity(0.f, 3.f);
 	MissileInstance->build();
 	//attachChild(std::move(MissileInstance));
-	mWorld->GetSceneGraph()->attachChild(std::move(MissileInstance));
+	mState->GetSceneGraph()->attachChild(std::move(MissileInstance));
 }
