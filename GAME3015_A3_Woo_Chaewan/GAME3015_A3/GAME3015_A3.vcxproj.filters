@@ -93,6 +93,9 @@
     <ClCompile Include="SceneNode.cpp">
       <Filter>SceneNode</Filter>
     </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Logic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Category.hpp">
@@ -175,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="SceneNode.hpp">
       <Filter>SceneNode</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Logic</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

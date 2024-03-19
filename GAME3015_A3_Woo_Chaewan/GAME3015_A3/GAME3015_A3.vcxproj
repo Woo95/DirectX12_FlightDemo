@@ -33,6 +33,7 @@
     <ClCompile Include="FrameResource.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Missile.cpp" />
@@ -62,6 +63,7 @@
     <ClInclude Include="FrameResource.h" />
     <ClInclude Include="Game.hpp" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Missile.h" />
     <ClInclude Include="PauseState.h" />

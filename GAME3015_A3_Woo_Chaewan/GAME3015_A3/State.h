@@ -10,6 +10,7 @@ class Player;
 class Game;
 class StateStack;
 class SceneNode;
+class Input;
 
 class State
 {
@@ -79,5 +80,6 @@ protected:
 	SceneNode*			mSceneGraph;
 	CommandQueue						mCommandQueue;
 	std::queue<std::function<void()>>			mPostCommandQueue;
+	Input* mInput;
 };
 

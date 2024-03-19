@@ -12,6 +12,7 @@ State::State(StateStack& stack, Context context)
 	: mStack(&stack)
 	, mContext(context)
 	, mSceneGraph(new SceneNode(context.game, this))
+	, mInput(nullptr)
 {
 }
 
