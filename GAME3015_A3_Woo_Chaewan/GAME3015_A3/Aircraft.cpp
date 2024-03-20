@@ -133,12 +133,6 @@ void Aircraft::checkProjectileLaunch(const GameTimer& gt, CommandQueue& commands
 {
 }
 
-void Aircraft::launchMissile()
-{
-	// STL vector에 문제가 발생하고 있어서, postCommand를 통해서 해결했다.
-	mState->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
-}
-
 void Aircraft::CreateMissile()
 {
 	std::unique_ptr<Missile> MissileInstance(new Missile(mGame, mState));
@@ -153,4 +147,30 @@ void Aircraft::CreateMissile()
 	MissileInstance->build();
 	//attachChild(std::move(MissileInstance));
 	mState->GetSceneGraph()->attachChild(std::move(MissileInstance));
+}
+
+void Aircraft::MoveLeft(SceneNode& Node, const GameTimer& gt)
+{
+	accelerate(-2.f, 0.f);
+}
+
+void Aircraft::MoveRight(SceneNode& Node, const GameTimer& gt)
+{
+	accelerate(2.f, 0.f);
+}
+
+void Aircraft::MoveForward(SceneNode& Node, const GameTimer& gt)
+{
+	accelerate(0.f, 2.f);
+}
+
+void Aircraft::MoveBackward(SceneNode& Node, const GameTimer& gt)
+{
+	accelerate(0.f, -2.f);
+}
+
+void Aircraft::launchMissile(SceneNode& Node, const GameTimer& gt)
+{
+	// STL vector에 문제가 발생하고 있어서, postCommand를 통해서 해결했다.
+	mState->AddPostCommandQueue<Aircraft>(this, &Aircraft::CreateMissile);
 }

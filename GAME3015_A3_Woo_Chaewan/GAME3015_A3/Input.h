@@ -3,9 +3,17 @@
 #include "Command.h"
 #include "Common/d3dApp.h"
 #include "Common/MathHelper.h"
+#include "Category.hpp"
 #include <map>
 
 class CommandQueue;
+
+enum class KeyCheckType
+{
+	Trigger,
+	Down,
+	Complete
+};
 
 class Input
 {
@@ -21,12 +29,14 @@ public:
 		std::string	Name;
 		char	Key;
 		Command	command;
+		KeyCheckType	Type;
 		bool	Press;
 		bool	Hold;
 		bool	Release;
 
 		ActionData()
 		{
+			Type = KeyCheckType::Complete;
 			Press = false;
 			Hold = false;
 			Release = false;
@@ -48,7 +58,7 @@ public:
 	* @param key The key to assign to the action.
 	*/
 	template <typename T>
-	void assignKey(const std::string& Name, const unsigned char key, T* Obj, void(T::*Func)(SceneNode&, const GameTimer&))
+	void assignKey(const std::string& Name, const unsigned char key, KeyCheckType CheckType, Category::Type Category, T* Obj, void(T::*Func)(SceneNode&, const GameTimer&))
 	{
 		if (mKeyBinding.find(Name) != mKeyBinding.end())
 			return;
@@ -57,7 +67,9 @@ public:
 
 		data.Name = Name;
 		data.Key = key;
-		data.command.action = std::bind(Func, Obj);
+		data.Type = CheckType;
+		data.command.category = Category;
+		data.command.action = std::bind(Func, Obj, std::placeholders::_1, std::placeholders::_2);
 
 		mKeyBinding.insert(std::make_pair(Name, data));
 	}

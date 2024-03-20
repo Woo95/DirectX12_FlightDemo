@@ -38,7 +38,7 @@ void Input::handleEvent(CommandQueue& commands)
 {
 	for (auto pair : mKeyBinding)
 	{
-		if (pair.second.Press)
+		if (pair.second.Press && pair.second.Type == KeyCheckType::Down)
 			commands.push(pair.second.command);
 	}
 }
@@ -48,7 +48,7 @@ void Input::handleRealtimeEvent(CommandQueue& commands)
 	// Traverse all assigned keys and check if they are pressed
 	for (auto pair : mKeyBinding)
 	{
-		if (pair.second.Hold)
+		if (pair.second.Hold && pair.second.Type == KeyCheckType::Trigger)
 			commands.push(pair.second.command);
 	}
 }

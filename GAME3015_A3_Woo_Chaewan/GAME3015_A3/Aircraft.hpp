@@ -63,11 +63,16 @@ public:
 	/**
 	 * @brief Launch a missile from the aircraft.
 	 */
-	void launchMissile();
 	/**
 	  * @brief Create a missile.
 	  */
 	void CreateMissile();
+
+	void MoveLeft(SceneNode& Node, const GameTimer& gt);
+	void MoveRight(SceneNode& Node, const GameTimer& gt);
+	void MoveForward(SceneNode& Node, const GameTimer& gt);
+	void MoveBackward(SceneNode& Node, const GameTimer& gt);
+	void launchMissile(SceneNode& Node, const GameTimer& gt);
 
 
 private:

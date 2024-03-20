@@ -1,6 +1,7 @@
 #include "GameState.h"
 #include "Aircraft.hpp"
 #include "SpriteNode.h"
+#include "Input.h"
 
 GameState::GameState(StateStack& stack, Context context)
 	: State(stack, context),
@@ -10,6 +11,8 @@ GameState::GameState(StateStack& stack, Context context)
 
 void GameState::init()
 {
+	mInput = new Input;
+
 	std::unique_ptr<Aircraft> player(new Aircraft(Aircraft::Eagle, mContext.game, this));
 	mPlayerAircraft = player.get();
 	mPlayerAircraft->setPosition(0.0, 15.0, 0.5);
@@ -17,6 +20,13 @@ void GameState::init()
 	mPlayerAircraft->setWorldRotation(0.0, 0.0, 0.0);
 	//mPlayerAircraft->setVelocity(2.f, 0.f);
 	mSceneGraph->attachChild(std::move(player));
+
+
+	mInput->assignKey<Aircraft>("MoveLeft", VK_LEFT, KeyCheckType::Trigger, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::MoveLeft);
+	mInput->assignKey<Aircraft>("MoveRight", VK_RIGHT, KeyCheckType::Trigger, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::MoveRight);
+	mInput->assignKey<Aircraft>("MoveForward", VK_UP, KeyCheckType::Trigger, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::MoveForward);
+	mInput->assignKey<Aircraft>("MoveBackward", VK_DOWN, KeyCheckType::Trigger, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::MoveBackward);
+	mInput->assignKey<Aircraft>("Fire", VK_SPACE, KeyCheckType::Down, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::launchMissile);
 
 	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, mContext.game, this));
 	auto raptor = enemy1.get();

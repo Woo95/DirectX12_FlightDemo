@@ -1,6 +1,7 @@
 #include "State.h"
 #include "StateStack.h"
 #include "SceneNode.hpp"
+#include "Input.h"
 
 State::Context::Context(Game* _game, Player* _player)	:
 	player(_player)
@@ -18,6 +19,9 @@ State::State(StateStack& stack, Context context)
 
 State::~State()
 {
+	if (mInput)
+		delete mInput;
+
 	if (mSceneGraph)
 	{
 		delete mSceneGraph;
@@ -35,6 +39,15 @@ void State::draw()
 
 bool State::update(const GameTimer& gt)
 {
+	if (mInput)
+	{
+		mInput->InputEvent();
+
+		mInput->handleEvent(mCommandQueue);
+
+		mInput->handleRealtimeEvent(mCommandQueue);
+	}
+
 	while (!mCommandQueue.isEmpty())
 		mSceneGraph->onCommand(mCommandQueue.pop(), gt);
 
