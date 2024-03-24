@@ -74,5 +74,6 @@ bool TitleState::handleRealtimeEvent(CommandQueue& commands)
 void TitleState::NextState(SceneNode& Node, const GameTimer& gt)
 {
 	requestStackPop();
-	requestStackPush(States::Menu);
+	//requestStackPush(States::Menu);
+	requestStackPush(States::Game);
 }

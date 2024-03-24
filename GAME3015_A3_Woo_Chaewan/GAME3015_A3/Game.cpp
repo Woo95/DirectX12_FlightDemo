@@ -447,6 +447,7 @@ void Game::LoadTextures()
 
 	mTextures[MainMenuTex->Name] = std::move(MainMenuTex);
 
+	/*
 	//StartButton
 	auto StartButtonTex = std::make_unique<Texture>();
 	StartButtonTex->Name = "StartButtonTex";
@@ -490,6 +491,7 @@ void Game::LoadTextures()
 		QuitButtonHoverTex->Resource, QuitButtonHoverTex->UploadHeap));
 
 	mTextures[QuitButtonHoverTex->Name] = std::move(QuitButtonHoverTex);
+	*/
 }
 
 void Game::BuildRootSignature()
@@ -559,10 +561,12 @@ void Game::BuildDescriptorHeaps()
 	auto TitleTex = mTextures["TitleTex"]->Resource;
 
 	auto MainMenuTex = mTextures["MainMenuTex"]->Resource;
+	/*
 	auto StartButtonTex = mTextures["StartButtonTex"]->Resource;
 	auto StartButtonHoverTex = mTextures["StartButtonHoverTex"]->Resource;
 	auto QuitButtonTex = mTextures["QuitButtonTex"]->Resource;
 	auto QuitButtonHoverTex = mTextures["QuitButtonHoverTex"]->Resource;
+	*/
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -613,6 +617,7 @@ void Game::BuildDescriptorHeaps()
 	srvDesc.Format = MainMenuTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(MainMenuTex.Get(), &srvDesc, hDescriptor);
 
+	/*
 	//StartButtonTex Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = StartButtonTex->GetDesc().Format;
@@ -632,7 +637,7 @@ void Game::BuildDescriptorHeaps()
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = QuitButtonHoverTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(QuitButtonHoverTex.Get(), &srvDesc, hDescriptor);
-
+	*/
 }
 
 void Game::BuildShadersAndInputLayout()
