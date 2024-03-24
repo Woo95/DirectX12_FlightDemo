@@ -6,6 +6,7 @@ class MainMenuState :
 public:
 	MainMenuState(StateStack& stack, Context context);
 
+	virtual void		init();
 	virtual void		draw();
 	virtual bool		update(const GameTimer& gt);
 	virtual	bool		InputEvent();
@@ -14,6 +15,8 @@ public:
 
 
 private:
-	//GUI::Container			mGUIContainer;
+	void KeyUp(SceneNode& Node, const GameTimer& gt);
+	void KeyDown(SceneNode& Node, const GameTimer& gt);
+	void Select(SceneNode& Node, const GameTimer& gt);
 };
 

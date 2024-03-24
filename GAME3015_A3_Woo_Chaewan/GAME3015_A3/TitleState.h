@@ -14,5 +14,6 @@ public:
 	virtual	bool		handleRealtimeEvent(CommandQueue& commands);
 
 private:
+	void NextState(SceneNode& Node, const GameTimer& gt);
 };
 
