@@ -14,7 +14,7 @@ void TitleState::init()
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mContext.game, this, "Title", "box"));
 	SpriteNode* Node = backgroundSprite.get();
 	//mBackground->setPosition(mWorldBounds.left, mWorldBounds.top);
-	Node->setPosition(0, 16.8, -5.5);
+	Node->setPosition(0, 16.8, -5.49);
 	Node->setScale(2.0, 1.1, 1.1);
 	//Node->setWorldRotation(90 * XM_PI / 180, 0, 180 * XM_PI / 180);
 	Node->setWorldRotation(3.14 / -2 + 3.14 / 16, 0, 0);
@@ -74,5 +74,4 @@ void TitleState::NextState(SceneNode& Node, const GameTimer& gt)
 {
 	requestStackPop();
 	requestStackPush(States::Menu);
-	//requestStackPush(States::Game);
 }

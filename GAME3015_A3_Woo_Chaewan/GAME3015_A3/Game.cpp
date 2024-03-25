@@ -444,6 +444,16 @@ void Game::LoadTextures()
 		MainMenuTex->Resource, MainMenuTex->UploadHeap));
 
 	mTextures[MainMenuTex->Name] = std::move(MainMenuTex);
+
+	//Cursor
+	auto CursorTex = std::make_unique<Texture>();
+	CursorTex->Name = "CursorTex";
+	CursorTex->Filename = L"Textures/Cursor.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), CursorTex->Filename.c_str(),
+		CursorTex->Resource, CursorTex->UploadHeap));
+
+	mTextures[CursorTex->Name] = std::move(CursorTex);
 }
 
 void Game::BuildRootSignature()
@@ -513,6 +523,7 @@ void Game::BuildDescriptorHeaps()
 
 	auto TitleTex = mTextures["TitleTex"]->Resource;
 	auto MainMenuTex = mTextures["MainMenuTex"]->Resource;
+	auto CursorTex = mTextures["CursorTex"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -562,6 +573,11 @@ void Game::BuildDescriptorHeaps()
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = MainMenuTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(MainMenuTex.Get(), &srvDesc, hDescriptor);
+
+	//CursorTex Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = CursorTex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(CursorTex.Get(), &srvDesc, hDescriptor);
 }
 
 void Game::BuildShadersAndInputLayout()
@@ -743,7 +759,6 @@ void Game::BuildFrameResources()
 //step13
 void Game::BuildMaterials()
 {
-
 	auto Eagle = std::make_unique<Material>();
 	Eagle->Name = "Eagle";
 	Eagle->MatCBIndex = 0;
@@ -803,6 +818,16 @@ void Game::BuildMaterials()
 	MainMenu->Roughness = 0.2f;
 
 	mMaterials["MainMenu"] = std::move(MainMenu);
+
+	auto Cursor = std::make_unique<Material>();
+	Cursor->Name = "Cursor";
+	Cursor->MatCBIndex = 6;
+	Cursor->DiffuseSrvHeapIndex = 6;
+	Cursor->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	Cursor->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	Cursor->Roughness = 0.2f;
+
+	mMaterials["Cursor"] = std::move(Cursor);
 }
 
 void Game::BuildRenderItems()

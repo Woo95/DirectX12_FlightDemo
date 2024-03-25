@@ -13,19 +13,23 @@ void MainMenuState::init()
 
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mContext.game, this, "MainMenu", "box"));
 	SpriteNode* Node = backgroundSprite.get();
-	Node->setPosition(0, 16.8, -5.5);
+	Node->setPosition(0, 16.8, -5.49);
 	Node->setScale(2.0, 1.1, 1.1);
 	Node->setWorldRotation(3.14 / -2 + 3.14 / 16, 0, 0);
 
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
-	std::unique_ptr<SpriteNode> RaptorSprite(new SpriteNode(mContext.game, this, "Raptor", "box"));
-	Node = RaptorSprite.get();
-	Node->setPosition(0, 16.9, -5.53);
-	Node->setScale(0.2, 1.0, 0.1);
-	Node->setWorldRotation(3.14 / -2 + 3.14 / 16, 0, 0);
+	std::unique_ptr<SpriteNode> cursorSprite(new SpriteNode(mContext.game, this, "Cursor", "box"));
+	Node = cursorSprite.get();
+	Node->setPosition(-0.15f, 16.77f, -5.51f);
+	/*
+	setPosition(-0.15, 16.77, -5.51);
+	setPosition(-0.15, 16.64, -5.53);
+	*/
+	Node->setScale(0.2f, 1.0f, 0.1f);
+	Node->setWorldRotation(3.14f / -2 + 3.14f / 16, 0.0f, 0.0f);
 
-	mSceneGraph->attachChild(std::move(RaptorSprite));
+	mSceneGraph->attachChild(std::move(cursorSprite));
 
 	mSceneGraph->build();
 
@@ -68,12 +72,23 @@ bool MainMenuState::handleRealtimeEvent(CommandQueue& commands)
 
 void MainMenuState::KeyUp(SceneNode& Node, const GameTimer& gt)
 {
+	mCurrentStatus = MenuStatus::Start;
 }
 
 void MainMenuState::KeyDown(SceneNode& Node, const GameTimer& gt)
 {
+	mCurrentStatus = MenuStatus::Quit;
 }
 
 void MainMenuState::Select(SceneNode& Node, const GameTimer& gt)
 {
+	if (mCurrentStatus == MenuStatus::Start)
+	{
+		requestStackPop();
+		requestStackPush(States::Game);
+	}
+	else if (mCurrentStatus == MenuStatus::Quit)
+	{
+		PostQuitMessage(0);
+	}
 }

@@ -18,5 +18,14 @@ private:
 	void KeyUp(SceneNode& Node, const GameTimer& gt);
 	void KeyDown(SceneNode& Node, const GameTimer& gt);
 	void Select(SceneNode& Node, const GameTimer& gt);
+
+private:
+	enum class MenuStatus : char
+	{
+		Start,
+		Quit
+	};
+
+	MenuStatus mCurrentStatus;
 };
 
