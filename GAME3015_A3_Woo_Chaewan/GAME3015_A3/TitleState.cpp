@@ -15,10 +15,9 @@ void TitleState::init()
 	SpriteNode* Node = backgroundSprite.get();
 	//mBackground->setPosition(mWorldBounds.left, mWorldBounds.top);
 	Node->setPosition(0, 16.8, -5.5);
-	Node->setScale(1.15, 1.0, 0.85);
+	Node->setScale(2.0, 1.1, 1.1);
 	//Node->setWorldRotation(90 * XM_PI / 180, 0, 180 * XM_PI / 180);
 	Node->setWorldRotation(3.14 / -2 + 3.14 / 16, 0, 0);
-
 
 	//mCamera.SetPosition(0, 17, -6.5);
 	//mCamera.Pitch(3.14 / 16);
@@ -74,6 +73,6 @@ bool TitleState::handleRealtimeEvent(CommandQueue& commands)
 void TitleState::NextState(SceneNode& Node, const GameTimer& gt)
 {
 	requestStackPop();
-	//requestStackPush(States::Menu);
-	requestStackPush(States::Game);
+	requestStackPush(States::Menu);
+	//requestStackPush(States::Game);
 }

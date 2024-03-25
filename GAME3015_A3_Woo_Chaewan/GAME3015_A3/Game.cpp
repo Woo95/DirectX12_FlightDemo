@@ -428,8 +428,7 @@ void Game::LoadTextures()
 	//Title
 	auto TitleTex = std::make_unique<Texture>();
 	TitleTex->Name = "TitleTex";
-	//TitleTex->Filename = L"Textures/StartScreen1.dds";
-	TitleTex->Filename = L"Textures/StartScreen1.dds";
+	TitleTex->Filename = L"Textures/TitleScreen.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), TitleTex->Filename.c_str(),
 		TitleTex->Resource, TitleTex->UploadHeap));
@@ -439,59 +438,12 @@ void Game::LoadTextures()
 	//MainMenu
 	auto MainMenuTex = std::make_unique<Texture>();
 	MainMenuTex->Name = "MainMenuTex";
-	//TitleTex->Filename = L"Textures/StartScreen1.dds";
-	MainMenuTex->Filename = L"Textures/MainMenu.dds";
+	MainMenuTex->Filename = L"Textures/MainMenuScreen.dds";
 	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
 		mCommandList.Get(), MainMenuTex->Filename.c_str(),
 		MainMenuTex->Resource, MainMenuTex->UploadHeap));
 
 	mTextures[MainMenuTex->Name] = std::move(MainMenuTex);
-
-	/*
-	//StartButton
-	auto StartButtonTex = std::make_unique<Texture>();
-	StartButtonTex->Name = "StartButtonTex";
-	//TitleTex->Filename = L"Textures/StartScreen1.dds";
-	StartButtonTex->Filename = L"Textures/Menu_Buttons_Start.dds";
-	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), StartButtonTex->Filename.c_str(),
-		StartButtonTex->Resource, StartButtonTex->UploadHeap));
-
-	mTextures[StartButtonTex->Name] = std::move(StartButtonTex);
-
-	//StartButtonHover
-	auto StartButtonHoverTex = std::make_unique<Texture>();
-	StartButtonHoverTex->Name = "StartButtonHoverTex";
-	//TitleTex->Filename = L"Textures/StartScreen1.dds";
-	StartButtonHoverTex->Filename = L"Textures/Menu_Buttons_StartHover.dds";
-	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), StartButtonHoverTex->Filename.c_str(),
-		StartButtonHoverTex->Resource, StartButtonHoverTex->UploadHeap));
-
-	mTextures[StartButtonHoverTex->Name] = std::move(StartButtonHoverTex);
-
-	//QuitButton
-	auto QuitButtonTex = std::make_unique<Texture>();
-	QuitButtonTex->Name = "QuitButtonTex";
-	//TitleTex->Filename = L"Textures/StartScreen1.dds";
-	QuitButtonTex->Filename = L"Textures/Menu_Buttons_Quit.dds";
-	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), QuitButtonTex->Filename.c_str(),
-		QuitButtonTex->Resource, QuitButtonTex->UploadHeap));
-
-	mTextures[QuitButtonTex->Name] = std::move(QuitButtonTex);
-
-	//QuitButtonHover
-	auto QuitButtonHoverTex = std::make_unique<Texture>();
-	QuitButtonHoverTex->Name = "QuitButtonHoverTex";
-	//TitleTex->Filename = L"Textures/StartScreen1.dds";
-	QuitButtonHoverTex->Filename = L"Textures/Menu_Buttons_QuitHover.dds";
-	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
-		mCommandList.Get(), QuitButtonHoverTex->Filename.c_str(),
-		QuitButtonHoverTex->Resource, QuitButtonHoverTex->UploadHeap));
-
-	mTextures[QuitButtonHoverTex->Name] = std::move(QuitButtonHoverTex);
-	*/
 }
 
 void Game::BuildRootSignature()
@@ -558,15 +510,9 @@ void Game::BuildDescriptorHeaps()
 	auto Jet2Tex = mTextures["Jet2ColorTex"]->Resource;
 	auto DesertTex = mTextures["DesertTex"]->Resource;
 	auto MissileTex = mTextures["MissileTex"]->Resource;
-	auto TitleTex = mTextures["TitleTex"]->Resource;
 
+	auto TitleTex = mTextures["TitleTex"]->Resource;
 	auto MainMenuTex = mTextures["MainMenuTex"]->Resource;
-	/*
-	auto StartButtonTex = mTextures["StartButtonTex"]->Resource;
-	auto StartButtonHoverTex = mTextures["StartButtonHoverTex"]->Resource;
-	auto QuitButtonTex = mTextures["QuitButtonTex"]->Resource;
-	auto QuitButtonHoverTex = mTextures["QuitButtonHoverTex"]->Resource;
-	*/
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 
@@ -616,28 +562,6 @@ void Game::BuildDescriptorHeaps()
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = MainMenuTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(MainMenuTex.Get(), &srvDesc, hDescriptor);
-
-	/*
-	//StartButtonTex Descriptor
-	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = StartButtonTex->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(StartButtonTex.Get(), &srvDesc, hDescriptor);
-
-	//StartButtonHoverTex Descriptor
-	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = StartButtonHoverTex->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(StartButtonHoverTex.Get(), &srvDesc, hDescriptor);
-
-	//QuitButtonTex Descriptor
-	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = QuitButtonTex->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(QuitButtonTex.Get(), &srvDesc, hDescriptor);
-
-	//QuitButtonTex Descriptor
-	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
-	srvDesc.Format = QuitButtonHoverTex->GetDesc().Format;
-	md3dDevice->CreateShaderResourceView(QuitButtonHoverTex.Get(), &srvDesc, hDescriptor);
-	*/
 }
 
 void Game::BuildShadersAndInputLayout()
@@ -879,47 +803,6 @@ void Game::BuildMaterials()
 	MainMenu->Roughness = 0.2f;
 
 	mMaterials["MainMenu"] = std::move(MainMenu);
-
-	auto StartButton = std::make_unique<Material>();
-	StartButton->Name = "StartButton";
-	StartButton->MatCBIndex = 6;
-	StartButton->DiffuseSrvHeapIndex = 6;
-	StartButton->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	StartButton->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
-	StartButton->Roughness = 0.2f;
-
-	mMaterials["StartButton"] = std::move(StartButton);
-
-	auto StartButtonHover = std::make_unique<Material>();
-	StartButtonHover->Name = "StartButtonHover";
-	StartButtonHover->MatCBIndex = 7;
-	StartButtonHover->DiffuseSrvHeapIndex = 7;
-	StartButtonHover->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	StartButtonHover->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
-	StartButtonHover->Roughness = 0.2f;
-
-	mMaterials["StartButtonHover"] = std::move(StartButtonHover);
-
-	auto QuitButton = std::make_unique<Material>();
-	QuitButton->Name = "QuitButton";
-	QuitButton->MatCBIndex = 8;
-	QuitButton->DiffuseSrvHeapIndex = 8;
-	QuitButton->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	QuitButton->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
-	QuitButton->Roughness = 0.2f;
-
-	mMaterials["QuitButton"] = std::move(QuitButton);
-
-	auto QuitButtonHover = std::make_unique<Material>();
-	QuitButtonHover->Name = "QuitButtonHover";
-	QuitButtonHover->MatCBIndex = 9;
-	QuitButtonHover->DiffuseSrvHeapIndex = 9;
-	QuitButtonHover->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	QuitButtonHover->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
-	QuitButtonHover->Roughness = 0.2f;
-
-	mMaterials["QuitButtonHover"] = std::move(QuitButtonHover);
-
 }
 
 void Game::BuildRenderItems()

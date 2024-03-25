@@ -14,27 +14,25 @@ void MainMenuState::init()
 	std::unique_ptr<SpriteNode> backgroundSprite(new SpriteNode(mContext.game, this, "MainMenu", "box"));
 	SpriteNode* Node = backgroundSprite.get();
 	Node->setPosition(0, 16.8, -5.5);
-	Node->setScale(1.15, 1.0, 0.85);
+	Node->setScale(2.0, 1.1, 1.1);
 	Node->setWorldRotation(3.14 / -2 + 3.14 / 16, 0, 0);
 
 	mSceneGraph->attachChild(std::move(backgroundSprite));
 
-	std::unique_ptr<SpriteNode> StartButtonSprite(new SpriteNode(mContext.game, this, "StartButton", "box"));
-	Node = StartButtonSprite.get();
-	Node->setPosition(0, 16.8, -5.55);
+	std::unique_ptr<SpriteNode> RaptorSprite(new SpriteNode(mContext.game, this, "Raptor", "box"));
+	Node = RaptorSprite.get();
+	Node->setPosition(0, 16.9, -5.53);
 	Node->setScale(0.2, 1.0, 0.1);
 	Node->setWorldRotation(3.14 / -2 + 3.14 / 16, 0, 0);
 
-	mSceneGraph->attachChild(std::move(StartButtonSprite));
+	mSceneGraph->attachChild(std::move(RaptorSprite));
 
 	mSceneGraph->build();
 
 	mInput->assignKey<MainMenuState>("KeyUp", VK_UP, KeyCheckType::Down, Category::Scene,
 		this, &MainMenuState::KeyUp);
-
 	mInput->assignKey<MainMenuState>("KeyDown", VK_DOWN, KeyCheckType::Down, Category::Scene,
 		this, &MainMenuState::KeyDown);
-
 	mInput->assignKey<MainMenuState>("Select", VK_RETURN, KeyCheckType::Down, Category::Scene,
 		this, &MainMenuState::Select);
 }
