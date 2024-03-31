@@ -29,6 +29,8 @@ void MainMenuState::init()
 	Node->setScale(0.2f, 1.0f, 0.1f);
 	Node->setWorldRotation(3.14f / -2 + 3.14f / 16, 0.0f, 0.0f);
 
+	mCursor = Node;
+
 	mSceneGraph->attachChild(std::move(cursorSprite));
 
 	mSceneGraph->build();
@@ -73,11 +75,15 @@ bool MainMenuState::handleRealtimeEvent(CommandQueue& commands)
 void MainMenuState::KeyUp(SceneNode& Node, const GameTimer& gt)
 {
 	mCurrentStatus = MenuStatus::Start;
+
+	mCursor->setPosition(-0.15, 16.77, -5.51);
 }
 
 void MainMenuState::KeyDown(SceneNode& Node, const GameTimer& gt)
 {
 	mCurrentStatus = MenuStatus::Quit;
+
+	mCursor->setPosition(-0.15, 16.64, -5.53);
 }
 
 void MainMenuState::Select(SceneNode& Node, const GameTimer& gt)

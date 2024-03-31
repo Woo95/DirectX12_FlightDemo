@@ -5,6 +5,7 @@
 #include <memory>
 #include <queue>
 #include "CommandQueue.h"
+#include "SpriteNode.h"
 
 class Player;
 class Game;
@@ -81,5 +82,6 @@ protected:
 	CommandQueue						mCommandQueue;
 	std::queue<std::function<void()>>			mPostCommandQueue;
 	Input* mInput;
+	SpriteNode* mCursor;
 };
 
