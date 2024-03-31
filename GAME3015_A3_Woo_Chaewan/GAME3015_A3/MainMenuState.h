@@ -1,5 +1,8 @@
 #pragma once
 #include "State.h"
+
+class SpriteNode;
+
 class MainMenuState :
     public State
 {
@@ -27,5 +30,6 @@ private:
 	};
 
 	MenuStatus mCurrentStatus;
+	SpriteNode* mCursor;
 };
 
