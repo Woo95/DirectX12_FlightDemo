@@ -445,6 +445,16 @@ void Game::LoadTextures()
 
 	mTextures[MainMenuTex->Name] = std::move(MainMenuTex);
 
+	//Pause
+	auto PauseTex = std::make_unique<Texture>();
+	PauseTex->Name = "PauseTex";
+	PauseTex->Filename = L"Textures/PauseScreen.dds";
+	ThrowIfFailed(DirectX::CreateDDSTextureFromFile12(md3dDevice.Get(),
+		mCommandList.Get(), PauseTex->Filename.c_str(),
+		PauseTex->Resource, PauseTex->UploadHeap));
+
+	mTextures[PauseTex->Name] = std::move(PauseTex);
+
 	//Cursor
 	auto CursorTex = std::make_unique<Texture>();
 	CursorTex->Name = "CursorTex";
@@ -523,6 +533,7 @@ void Game::BuildDescriptorHeaps()
 
 	auto TitleTex = mTextures["TitleTex"]->Resource;
 	auto MainMenuTex = mTextures["MainMenuTex"]->Resource;
+	auto PauseTex = mTextures["PauseTex"]->Resource;
 	auto CursorTex = mTextures["CursorTex"]->Resource;
 
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
@@ -573,6 +584,11 @@ void Game::BuildDescriptorHeaps()
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
 	srvDesc.Format = MainMenuTex->GetDesc().Format;
 	md3dDevice->CreateShaderResourceView(MainMenuTex.Get(), &srvDesc, hDescriptor);
+
+	//PauseTex Descriptor
+	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
+	srvDesc.Format = PauseTex->GetDesc().Format;
+	md3dDevice->CreateShaderResourceView(PauseTex.Get(), &srvDesc, hDescriptor);
 
 	//CursorTex Descriptor
 	hDescriptor.Offset(1, mCbvSrvDescriptorSize);
@@ -819,10 +835,20 @@ void Game::BuildMaterials()
 
 	mMaterials["MainMenu"] = std::move(MainMenu);
 
+	auto Pause = std::make_unique<Material>();
+	Pause->Name = "Pause";
+	Pause->MatCBIndex = 6;
+	Pause->DiffuseSrvHeapIndex = 6;
+	Pause->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	Pause->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
+	Pause->Roughness = 0.2f;
+
+	mMaterials["Pause"] = std::move(Pause);
+
 	auto Cursor = std::make_unique<Material>();
 	Cursor->Name = "Cursor";
-	Cursor->MatCBIndex = 6;
-	Cursor->DiffuseSrvHeapIndex = 6;
+	Cursor->MatCBIndex = 7;
+	Cursor->DiffuseSrvHeapIndex = 7;
 	Cursor->DiffuseAlbedo = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	Cursor->FresnelR0 = XMFLOAT3(0.05f, 0.05f, 0.05f);
 	Cursor->Roughness = 0.2f;

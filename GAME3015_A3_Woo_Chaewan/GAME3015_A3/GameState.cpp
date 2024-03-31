@@ -27,6 +27,7 @@ void GameState::init()
 	mInput->assignKey<Aircraft>("MoveForward", VK_UP, KeyCheckType::Trigger, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::MoveForward);
 	mInput->assignKey<Aircraft>("MoveBackward", VK_DOWN, KeyCheckType::Trigger, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::MoveBackward);
 	mInput->assignKey<Aircraft>("Fire", VK_SPACE, KeyCheckType::Down, Category::PlayerAircraft, mPlayerAircraft, &Aircraft::launchMissile);
+	mInput->assignKey<GameState>("Pause", VK_P, KeyCheckType::Down, Category::Scene, this, &GameState::Pause);
 
 	std::unique_ptr<Aircraft> enemy1(new Aircraft(Aircraft::Raptor, mContext.game, this));
 	auto raptor = enemy1.get();
@@ -74,13 +75,16 @@ bool GameState::InputEvent()
 
 bool GameState::handleEvent(CommandQueue& commands)
 {
-	//requestStackPop();
-	//requestStackPush(States::Menu);
-
 	return true;
 }
 
 bool GameState::handleRealtimeEvent(CommandQueue& commands)
 {
 	return true;
+}
+
+void GameState::Pause(SceneNode& Node, const GameTimer& gt)
+{
+	requestStackPop();
+	requestStackPush(States::Pause);
 }

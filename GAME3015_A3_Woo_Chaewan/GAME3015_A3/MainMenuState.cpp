@@ -2,8 +2,10 @@
 #include "SpriteNode.h"
 #include "Input.h"
 
-MainMenuState::MainMenuState(StateStack& stack, Context context)
-	: State(stack, context)
+MainMenuState::MainMenuState(StateStack& stack, Context context)	: 
+	State(stack, context),
+	mCurrentStatus(MenuStatus::Start),
+	mCursor(nullptr)
 {
 }
 

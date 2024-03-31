@@ -2,6 +2,8 @@
 
 #include "State.h"
 
+#define VK_P 0x50
+
 class GameState :
     public State
 {
@@ -14,6 +16,9 @@ public:
 	virtual	bool		InputEvent();
 	virtual	bool		handleEvent(CommandQueue& commands);
 	virtual	bool		handleRealtimeEvent(CommandQueue& commands);
+
+private:
+	void Pause(SceneNode& Node, const GameTimer& gt);
 
 private:
 	class Player* mPlayer;
