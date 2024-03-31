@@ -22,10 +22,6 @@ void MainMenuState::init()
 	std::unique_ptr<SpriteNode> cursorSprite(new SpriteNode(mContext.game, this, "Cursor", "box"));
 	Node = cursorSprite.get();
 	Node->setPosition(-0.15f, 16.77f, -5.51f);
-	/*
-	setPosition(-0.15, 16.77, -5.51);
-	setPosition(-0.15, 16.64, -5.53);
-	*/
 	Node->setScale(0.2f, 1.0f, 0.1f);
 	Node->setWorldRotation(3.14f / -2 + 3.14f / 16, 0.0f, 0.0f);
 
