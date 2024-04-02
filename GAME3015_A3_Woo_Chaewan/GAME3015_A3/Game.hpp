@@ -1,4 +1,3 @@
-
 #include "Common/d3dApp.h"
 #include "Common/Camera.h"
 #include "Common/d3dUtil.h"
@@ -156,31 +155,57 @@ private:
 	*/
 	XMFLOAT3 GetHillsNormal(float x, float z)const;
 
+	/**
+	* @brief Gets the array of static samplers
+	* @return The array of static samplers
+	*/
 	std::array<const CD3DX12_STATIC_SAMPLER_DESC, 6> GetStaticSamplers();
 
+	/**
+	* @brief Registers game states
+	*/
 	void registerStates();
 
 public:
+	/**
+	* @brief Gets the current frame resource
+	* @return Pointer to the current frame resource
+	*/
 	FrameResource* GetCurrentFrameResource()
 	{
 		return mCurrFrameResource;
 	}
 
+	/**
+	* @brief Gets the descriptor heap
+	* @return ComPtr to the ID3D12DescriptorHeap
+	*/
 	ComPtr<ID3D12DescriptorHeap> GetDescriptorHeap()
 	{
 		return mSrvDescriptorHeap;
 	}
 
+	/**
+	* @brief Gets the size of the descriptor heap
+	* @return The size of the descriptor heap
+	*/
 	UINT GetDescriptorHeapSize()
 	{
 		return mCbvSrvDescriptorSize;
 	}
 
+	/**
+	* @brief Increments the current render count
+	*/
 	void AddCurrentRenderCount()
 	{
 		++mCurrentRenderCount;
 	}
 
+	/**
+	* @brief Gets the current render count
+	* @return The current render count
+	*/
 	int GetCurrentRenderCount()
 	{
 		return mCurrentRenderCount;
@@ -220,17 +245,8 @@ private:
 
 	PassConstants mMainPassCB;
 
-	//XMFLOAT3 mEyePos = { 0.0f, 0.0f, -10.0f };
-	//XMFLOAT4X4 mView = MathHelper::Identity4x4();
-	//XMFLOAT4X4 mProj = MathHelper::Identity4x4();
-
-	//float mTheta = 1.3f * XM_PI;
-	//float mPhi = 0.4f * XM_PI;
-	//float mRadius = 2.5f;
-
 	POINT mLastMousePos;
 	Camera mCamera;
-	//World mWorld;
 	StateStack				mStateStack;
 	Player					mPlayer;
 	bool		mPause = false;

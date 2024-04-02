@@ -15,15 +15,31 @@ enum class KeyCheckType
 	Complete
 };
 
+/**
+* @brief Class representing the input handling system.
+*/
 class Input
 {
 public:
 	Input();
+	/**
+	* @brief Handles input events.
+	*/
 	void					InputEvent();
+	/**
+	* @brief Handles specific events for the input system.
+	* @param commands The CommandQueue to handle commands.
+	*/
 	void					handleEvent(CommandQueue& commands);
+	/**
+	* @brief Handles real-time events for the input system.
+	* @param commands The CommandQueue to handle real-time commands.
+	*/
 	void					handleRealtimeEvent(CommandQueue& commands);
 
-
+	/**
+	* @brief Struct representing action data for key bindings.
+	*/
 	struct ActionData
 	{
 		std::string	Name;
@@ -34,6 +50,9 @@ public:
 		bool	Hold;
 		bool	Release;
 
+		/**
+		* @brief Default constructor for ActionData.
+		*/
 		ActionData()
 		{
 			Type = KeyCheckType::Complete;
@@ -42,6 +61,11 @@ public:
 			Release = false;
 		}
 
+		/**
+		* @brief Constructor for ActionData with name and key.
+		* @param name The name of the action.
+		* @param key The key assigned to the action.
+		*/
 		ActionData(const std::string& name, char key)
 		{
 			Name = name;
@@ -54,8 +78,13 @@ public:
 
 	/**
 	* @brief Assigns a key to a specific action.
-	* @param action The action to assign a key to.
+	* @param Name The name of the action to assign a key to.
 	* @param key The key to assign to the action.
+	* @param CheckType The type of key check (Trigger, Down, Complete).
+	* @param Category The category type for the action.
+	* @param Obj The object pointer to bind the action with.
+	* @param Func The member function pointer for the action.
+	* @tparam T The type of the object.
 	*/
 	template <typename T>
 	void assignKey(const std::string& Name, const unsigned char key, KeyCheckType CheckType, Category::Type Category, T* Obj, void(T::*Func)(SceneNode&, const GameTimer&))

@@ -20,6 +20,10 @@ public:
 
 
 public:
+	/**
+	* @brief Constructor for StateStack.
+	* @param context Reference to the State::Context providing necessary resources.
+	*/
 	explicit			StateStack(State::Context context);
 
 	template <typename T>
