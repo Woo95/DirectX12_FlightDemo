@@ -85,6 +85,5 @@ bool GameState::handleRealtimeEvent(CommandQueue& commands)
 
 void GameState::Pause(SceneNode& Node, const GameTimer& gt)
 {
-	requestStackPop();
 	requestStackPush(States::Pause);
 }

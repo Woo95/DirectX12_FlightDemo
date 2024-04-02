@@ -69,7 +69,7 @@ void Game::OnResize()
 	mCamera.SetLens(0.25f * MathHelper::Pi, AspectRatio(), 1.0f, 1000.0f);
 }
 
-void Game::Update(const GameTimer& gt)
+bool Game::Update(const GameTimer& gt)
 {
 	OnKeyboardInput(gt);
 
@@ -78,7 +78,8 @@ void Game::Update(const GameTimer& gt)
 	mCurrFrameResource = mFrameResources[mCurrFrameResourceIndex].get();
 
 
-	mStateStack.update(gt);
+	if (mStateStack.update(gt))
+		return true;
 	//mWorld.update(gt);
 	//UpdateCamera(gt);
 
@@ -96,6 +97,8 @@ void Game::Update(const GameTimer& gt)
 	UpdateObjectCBs(gt);
 	UpdateMaterialCBs(gt);
 	UpdateMainPassCB(gt);
+
+	return false;
 }
 
 void Game::Draw(const GameTimer& gt)

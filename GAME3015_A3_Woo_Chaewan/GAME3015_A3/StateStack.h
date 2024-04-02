@@ -25,7 +25,7 @@ public:
 	template <typename T>
 	void				registerState(States::ID stateID);
 
-	void				update(const GameTimer& gt);
+	bool				update(const GameTimer& gt);
 	void				draw();
 	void				InputEvent();
 	void				handleEvent(CommandQueue& commands);
@@ -40,7 +40,7 @@ public:
 
 private:
 	State::Ptr			createState(States::ID stateID);
-	void				applyPendingChanges();
+	bool				applyPendingChanges();
 
 
 private:
@@ -67,6 +67,9 @@ void StateStack::registerState(States::ID stateID)
 {
 	mFactories[stateID] = [this]()
 		{
-			return State::Ptr(new T(*this, mContext));
+			T* State = new T(*this, mContext);
+			State->init();
+
+			return State::Ptr(State);
 		};
 }

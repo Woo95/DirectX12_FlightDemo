@@ -46,7 +46,7 @@ private:
 	/**
 	* @brief Updates the Game instance
 	*/
-	virtual void Update(const GameTimer& gt)override;
+	virtual bool Update(const GameTimer& gt)override;
 
 	/**
 	* @brief Draw the Game instance
@@ -233,6 +233,19 @@ private:
 	//World mWorld;
 	StateStack				mStateStack;
 	Player					mPlayer;
+	bool		mPause = false;
+
+public:
+	void SetPause(bool Pause)
+	{
+		mPause = Pause;
+
+		if (Pause)
+			mTimer.Stop();
+
+		else
+			mTimer.Start();
+	}
 
 public:
 	/*World* GetWorld()

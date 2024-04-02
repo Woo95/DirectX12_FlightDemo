@@ -1,6 +1,7 @@
 #include "PauseState.h"
 #include "SpriteNode.h"
 #include "Input.h"
+#include "Game.hpp"
 
 PauseState::PauseState(StateStack& stack, Context context)	: 
 	State(stack, context),
@@ -39,6 +40,8 @@ void PauseState::init()
 		this, &PauseState::KeyDown);
 	mInput->assignKey<PauseState>("Select", VK_RETURN, KeyCheckType::Complete, Category::Scene,
 		this, &PauseState::Select);
+
+	mContext.game->SetPause(true);
 }
 
 void PauseState::draw()
@@ -86,11 +89,13 @@ void PauseState::Select(SceneNode& Node, const GameTimer& gt)
 {
 	if (mCurrentStatus == PauseStatus::Resume)
 	{
+		mContext.game->SetPause(false);
 		requestStackPop();
-		requestStackPush(States::Game);
 	}
 	else if (mCurrentStatus == PauseStatus::MainMenu)
 	{
+		mContext.game->SetPause(false);
+		requestStackPop();
 		requestStackPop();
 		requestStackPush(States::Menu);
 	}

@@ -11,6 +11,7 @@ SceneNode::SceneNode(Game* game, State* state)
 	mWorldPosition = XMFLOAT3(0, 0, 0);
 	mWorldScaling = XMFLOAT3(1, 1, 1);
 	mWorldRotation = XMFLOAT3(0, 0, 0);
+	mCategory = Category::Scene;
 }
 
 SceneNode::~SceneNode()
@@ -173,7 +174,7 @@ void SceneNode::onCommand(const Command& command, const GameTimer& gt)
 
 unsigned int SceneNode::getCategory() const
 {
-	return Category::Scene;
+	return mCategory;
 }
 
 void SceneNode::move(float x, float y, float z)

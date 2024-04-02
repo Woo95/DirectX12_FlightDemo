@@ -8,9 +8,11 @@ Aircraft::Aircraft(Type type, Game* game, State* state) : Entity(game, state)
 	switch (type)
 	{
 	case (Eagle):
+		mCategory = Category::PlayerAircraft;
 		mSprite = "Eagle";
 		break;
 	case (Raptor):
+		mCategory = Category::AlliedAircraft;
 		mSprite = "Raptor";
 		break;
 	default:

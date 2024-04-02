@@ -182,6 +182,7 @@ protected:
 	std::vector<Ptr>		mChildren;
 	SceneNode* mParent;
 	bool		mActive;
+	Category::Type			mCategory;
 
 public:
 	bool GetActive()

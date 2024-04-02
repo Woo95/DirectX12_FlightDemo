@@ -8,16 +8,16 @@ StateStack::StateStack(State::Context context)
 {
 }
 
-void StateStack::update(const GameTimer& gt)
+bool StateStack::update(const GameTimer& gt)
 {
-	applyPendingChanges();
-
 	// Iterate from top to bottom, stop as soon as update() returns false
 	for (auto itr = mStack.rbegin(); itr != mStack.rend(); ++itr)
 	{
 		if (!(*itr)->update(gt))
 			break;
 	}
+
+	return applyPendingChanges();
 }
 
 void StateStack::draw()
@@ -89,8 +89,10 @@ State::Ptr StateStack::createState(States::ID stateID)
 	return found->second();
 }
 
-void StateStack::applyPendingChanges()
+bool StateStack::applyPendingChanges()
 {
+	bool	Change = false;
+
 	for (PendingChange change : mPendingList)
 	{
 		switch (change.action)
@@ -101,7 +103,9 @@ void StateStack::applyPendingChanges()
 			ptr->init();
 			mStack.push_back(ptr);*/
 			mStack.push_back(createState(change.stateID));
-			mStack.back()->init();
+			//mStack.back()->init();
+
+			Change = true;
 		}
 			break;
 
@@ -116,6 +120,8 @@ void StateStack::applyPendingChanges()
 	}
 
 	mPendingList.clear();
+
+	return Change;
 }
 
 StateStack::PendingChange::PendingChange(Action action, States::ID stateID)

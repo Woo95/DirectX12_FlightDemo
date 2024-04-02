@@ -6,6 +6,7 @@ SpriteNode::SpriteNode(Game* game, State* state, const std::string& SpriteName, 
 	, mSpriteName(SpriteName)
 	, mShapeName(ShapeName)
 {
+	mCategory = Category::Other;
 }
 
 SpriteNode::~SpriteNode()
