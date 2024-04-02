@@ -40,6 +40,9 @@ void Input::handleEvent(CommandQueue& commands)
 	{
 		if (pair.second.Press && pair.second.Type == KeyCheckType::Down)
 			commands.push(pair.second.command);
+
+		else if(pair.second.Release && pair.second.Type == KeyCheckType::Complete)
+			commands.push(pair.second.command);
 	}
 }
 

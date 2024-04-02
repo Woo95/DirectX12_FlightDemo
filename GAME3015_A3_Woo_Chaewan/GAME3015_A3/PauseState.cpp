@@ -37,7 +37,7 @@ void PauseState::init()
 		this, &PauseState::KeyUp);
 	mInput->assignKey<PauseState>("KeyDown", VK_DOWN, KeyCheckType::Down, Category::Scene,
 		this, &PauseState::KeyDown);
-	mInput->assignKey<PauseState>("Select", VK_RETURN, KeyCheckType::Down, Category::Scene,
+	mInput->assignKey<PauseState>("Select", VK_RETURN, KeyCheckType::Complete, Category::Scene,
 		this, &PauseState::Select);
 }
 
